@@ -4,17 +4,33 @@ import os
 import shutil
 import sys
 import math
-import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("")
-shutil.rmtree("data/plots")
-os.mkdir("data/plots")
+if (sys.argv[1] == '-n'):
+	NumT = int(sys.argv[2])
+	if (sys.argv[3] == '-t'):
+		maxTau = float(sys.argv[4])
+elif (sys.argv[1] == '-t'):
+	maxTau = float(sys.argv[2])
+	if (sys.argv[3] == '-n'):
+		NumT = int(sys.argv[4])
+else:
+	print 'Invalid Parameters!\n'
+	sys.exit(-1)
+
+if (os.path.exists("data")): 
+	shutil.rmtree("data")
+	os.mkdir("data")
+	os.mkdir("data/plots")
+else:
+	os.mkdir("data")
+	os.mkdir("data/plots")
+
+print commands.getoutput('./run -n ' + str(NumT) + ' -t ' + str(maxTau))	
 
 cfgFile = open('body1.txt','r')
 cfg = cfgFile.readlines()
 cfgFile.close()
-MaxV = math.sqrt(float(cfg[16].split()[1])*float(cfg[16].split()[1]) + float(cfg[23].split()[1])*float(cfg[23].split()[1]) + float(cfg[17].split()[1])*float(cfg[17].split()[1]) + float(cfg[24].split()[1])*float(cfg[24].split()[1]))/4 
+MaxV = max(float(cfg[17].split()[1]), float(cfg[25].split()[1]))
 
 if MaxV != 0:
 	plt = open('plotter','r')
@@ -23,7 +39,7 @@ if MaxV != 0:
 	for i in range(len(plt_lines)):
 		line_arr = plt_lines[i].split()
 		if line_arr.count("yrange") == 1:
-			line_arr[2] = str( '[-' + str(MaxV) + ':' + str(MaxV) + ']' )
+			line_arr[2] = str( '[-' + str(MaxV*1.1) + ':' + str(MaxV*1.1) + ']' )
 			plt_lines[i] = ''
 			for word in line_arr:
 				plt_lines[i] = plt_lines[i] + word + ' '
@@ -35,8 +51,7 @@ if MaxV != 0:
 
 
 step = 1
-NumTimeSteps = 400
-for i in range(0,(NumTimeSteps + 1),step):
+for i in range(0,(NumT + 1),step):
 	plt = open('plotter','r')
 	plt_lines = plt.readlines()
 	plt.close()
