@@ -17,9 +17,12 @@ Node::~Node() {
 }
 
 float Node::getRiman(int i) {
-	float a = sqrt(E/rho);
+	float a = getA();
 	if(i == 1) return (v - a*eps)/2/a;
 	if(i == 2) return (v + a*eps)/2/a;
 }
 
+float Node::getA() {
+	return sqrt(E/rho);
+}
 

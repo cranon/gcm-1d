@@ -8,6 +8,7 @@ public:
     Node();
     Node(int _num, float _x, float _v, float _eps, float _rho, float _E);
     float getRiman(int i);
+	float getA();
 	~Node();
 };
 
