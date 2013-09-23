@@ -1,0 +1,27 @@
+Body2
+elastic
+Left	ZeroV
+Right	ZeroV
+Number_of_nodes	101
+LeftCorner	2
+RightCorner	3
+rho0    1
+E0  1
+V0  0
+EPS0  0
+
+wave1
+x1  2.1
+x2  2.2
+rho0    1
+E0  1
+V_0 0.1
+EPS_0 0.1
+
+wave2
+x1  0
+x2  -1
+rho0    1
+E0  1
+V_0 0.1
+EPS_0 0.1
