@@ -5,6 +5,8 @@ import shutil
 import sys
 import math
 
+# Script for running cpp programm and making video
+
 if (sys.argv[1] == '-n'):
 	NumT = int(sys.argv[2])
 	if (sys.argv[3] == '-t'):
