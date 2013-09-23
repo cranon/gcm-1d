@@ -1,6 +1,0 @@
-reset
-set term jpeg 
-set xrange [0:1]
-set yrange [-0.11:0.11] 
-set output "data/plots/Plot_400.jpeg" 
-plot "data/Body_1_Step_400.txt" using 2:3 with lines 
