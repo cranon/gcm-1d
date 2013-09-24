@@ -33,6 +33,8 @@ cfgFile = open('body1.txt','r')
 cfg = cfgFile.readlines()
 cfgFile.close()
 MaxV = max(float(cfg[17].split()[1]), float(cfg[25].split()[1]))
+LeftCnr = float(cfg[5].split()[1]);
+RightCnr = float(cfg[6].split()[1]);
 
 if MaxV != 0:
 	plt = open('plotter','r')
@@ -46,6 +48,13 @@ if MaxV != 0:
 			for word in line_arr:
 				plt_lines[i] = plt_lines[i] + word + ' '
 			plt_lines[i] = plt_lines[i] + '\n'
+		if line_arr.count("xrange") == 1:
+			line_arr[2] = str( '[' + str(LeftCnr) + ':' + str(RightCnr) + ']' )
+			plt_lines[i] = ''
+			for word in line_arr:
+				plt_lines[i] = plt_lines[i] + word + ' '
+			plt_lines[i] = plt_lines[i] + '\n'
+
 			
 	plt = open('plotter','w')
 	plt.writelines(plt_lines)
