@@ -5,7 +5,7 @@ import shutil
 import sys
 import math
 
-# Script for running cpp programm and making video from plots
+# Script for running cpp programm and making videos
 
 if (sys.argv[1] == '-n'):
 	NumT = int(sys.argv[2])
