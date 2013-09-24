@@ -1,5 +1,7 @@
 #include "NumMethod.h"
 
+using namespace std;
+
 NumMethod::NumMethod() {
 	
 }
@@ -40,7 +42,7 @@ Node NumMethod::FirstOrder_Last(Mesh *mesh) {
 	return tmp;
 }
 
-void NumMethod::FirstOrder(Mesh *mesh) {
+int NumMethod::FirstOrder(Mesh *mesh) {
 	Node last = FirstOrder_First(mesh);
 	Node tmp;
 	float w1, w2;
@@ -54,10 +56,10 @@ void NumMethod::FirstOrder(Mesh *mesh) {
 			tmp.x = mesh->Values[i].x + tau*mesh->Values[i].v;
 			w1 = mesh->Values[i].getRiman(1) + (mesh->Values[i].getRiman(1) - mesh->Values[i-1].getRiman(1))*(-tau*a_prev)/(mesh->Values[i].x - mesh->Values[i-1].x);
 			w2 = mesh->Values[i].getRiman(2) + (mesh->Values[i+1].getRiman(2) - mesh->Values[i].getRiman(2))*(tau*a_next)/(mesh->Values[i+1].x - mesh->Values[i].x);
-	
-		
 			tmp.v = (w1 + w2)*(a_next + a_prev)/2;
+			if(fabs(tmp.x - mesh->Values[i].x) > fmax(fabs(mesh->Values[i].x - mesh->Values[i-1].x), fabs(mesh->Values[i].x - mesh->Values[i+1].x))/3) { cout << "PIZDEC' X i="<< i << endl; return -1; } 
 			tmp.eps = w2 - w1;
+			if(fabs(tmp.eps) >= 0.000125) cout << "Plastic area" << endl;
 			mesh->Values[i-1] = last;
 			last = tmp;
 		}

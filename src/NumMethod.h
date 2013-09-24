@@ -1,6 +1,7 @@
 #include "Node.h"
 #include "Mesh.h"
 #include <cmath>
+#include <iostream>
 
 class NumMethod {
 	float tau;
@@ -8,7 +9,7 @@ class NumMethod {
 		NumMethod();
 		NumMethod(float _tau);
 		~NumMethod();
-		void FirstOrder(Mesh *mesh);
+		int FirstOrder(Mesh *mesh);
 		Node FirstOrder_First(Mesh *mesh);
 		Node FirstOrder_Last(Mesh *mesh);
 };

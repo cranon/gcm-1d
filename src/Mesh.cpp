@@ -1,18 +1,16 @@
 #include "Mesh.h"
-#include <fstream>
-#include <iostream>
-
-using namespace std;
 
 Mesh::Mesh() {
-		cout << "empty constructor of mesh" << endl;
 		NumX = 0;
+		rheology = "NULL";
+		cout << "empty constructor of mesh" << endl;
 }
 
-void Mesh::setParameters(Node *InitValues, int _NumX) {
+void Mesh::setParameters(Node *InitValues, int _NumX, string _rheology) {
 	cout << "setting par-s of mesh" << endl;
 	NumX = _NumX;
 	Values = new Node [NumX];
+	rheology = _rheology;
 	for (int i = 0; i < NumX; i++) {
 		Values[i] = InitValues[i];
 	}

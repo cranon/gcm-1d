@@ -21,7 +21,10 @@ int main(int argc, char** argv) {
 	Scene scene;
 	scene.Init(1,"",false);
 	for (int i = 0; i < NumT; i++) {
-		scene.doNextStep(MaxTau, methodType);
+		if(scene.doNextStep(MaxTau, methodType) == -1) { 
+			cout << "Error on " << i << " time step" << endl; 
+			return -1; 
+		}
 	}
 	return 0;
 }
