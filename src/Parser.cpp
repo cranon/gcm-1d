@@ -1,12 +1,4 @@
 #include "Parser.h"
-#include <iostream>
-#include <cstring>
-#include <fstream>
-#include <stdlib.h>
-#include <sstream>
-#include <string>
-
-using namespace std;
 
 Parser::Parser() {
 }
@@ -20,14 +12,14 @@ void Parser::Reading(const char * fileName) {
 		int i;
         
         cfg >> scfg;
-        cfg >> scfg;
-		rheology = scfg.c_str();
+        cfg >> scfg; 
+		rheology = scfg;
 		cfg >> scfg;
 		cfg >> scfg;
-		Left = scfg.c_str();
+		Left = scfg;
 		cfg >> scfg;
 		cfg >> scfg;
-		Right = scfg.c_str();
+		Right = scfg;
 		cfg >> scfg;
 		cfg >> scfg;
         NumX = atoi(scfg.c_str());
@@ -64,6 +56,7 @@ Node *Parser::getInitValues() {
 		InitValues[i].eps = body[5];
 		InitValues[i].E = body[3];
 		InitValues[i].rho = body[2];
+		InitValues[i].rheology = rheology;
 	}
 	if (wave1[1] < wave1[0]) return InitValues;
 	for (int i = 0; i < NumX; i++) {
@@ -90,12 +83,12 @@ Node *Parser::getInitValues() {
 int Parser::getNumX() {
 	return NumX;
 }
-const char *Parser::getRheology() {
+string Parser::getRheology() {
 	return rheology;
 }
-const char *Parser::getLeft() {
+string Parser::getLeft() {
 	return Left;
 }
-const char *Parser::getRight() {
+string Parser::getRight() {
 	return Right;
 }
