@@ -4,8 +4,6 @@
 #include <sstream>
 #include <string>
 
-using namespace std;
-
 Scene::Scene() {
 	fileNumber = 0;
 	cout << "Creating scene" << endl;
@@ -15,13 +13,13 @@ Scene::~Scene() {
 	cout << "deleting scene" << endl;
 }
 
-void Scene::doNextStep(float maxTau, int methodType) {
+int Scene::doNextStep(float maxTau, int methodType) {
 	fileNumber = fileNumber + 1;
 	if (NumOfBodies == 1) {
 		/*
 		 * Setting maxTau depends on condition of the stability will be here 
 		 */
-		body1.doNextStep(maxTau,methodType,"Previous","Previous");
+		if(body1.doNextStep(maxTau,methodType,"Previous","Previous") == -1) return -1;
 		body1.printData(fileNumber);
 	}
 }

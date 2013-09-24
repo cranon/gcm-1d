@@ -2,6 +2,8 @@
 #ifndef SCENE_H
 #define	SCENE_H
 
+using namespace std;
+
 class Scene {
 	int fileNumber;
 	int NumOfBodies;
@@ -12,7 +14,7 @@ class Scene {
 public:
 	Scene();
 	void Init(int NumOfBodies, const char * _ContCond, bool _inContact);
-	void doNextStep(float maxTau, int methodType);
+	int doNextStep(float maxTau, int methodType);
 	~Scene();
 };
 

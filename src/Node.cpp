@@ -1,5 +1,4 @@
 #include "Node.h"
-#include <cmath>
 
 Node::Node() {
 }
@@ -23,6 +22,22 @@ float Node::getRiman(int i) {
 }
 
 float Node::getA() {
-	return sqrt(E/rho);
+	switch((rheology.c_str())[0]) {
+		case 'e': // elastic model
+			return sqrt(E/rho);
+			break;
+		case 'p': // plastic model 
+			if(fabs(eps) >= 0.0001 && fabs(eps) < 0.000125) {
+				return sqrt(E/3/rho);
+			}
+			if(fabs(eps) >= 0.000125 && fabs(eps) < 0.000150) {
+				return sqrt(E/10/rho);
+			}
+			if(fabs(eps) >= 0.00015) {
+				return sqrt(E/30/rho);
+			}
+			else return sqrt(E/rho);
+			break;
+	}
 }
 
