@@ -5,7 +5,7 @@ import shutil
 import sys
 import math
 
-# Script for running cpp programm and making video from plots
+# Script for running cpp programm and making videos and plots
 
 if (sys.argv[1] == '-n'):
 	NumT = int(sys.argv[2])
@@ -32,7 +32,13 @@ print commands.getoutput('./run -n ' + str(NumT) + ' -t ' + str(maxTau))
 cfgFile = open('body1.txt','r')
 cfg = cfgFile.readlines()
 cfgFile.close()
+<<<<<<< HEAD
 MaxV = max(float(cfg[18].split()[1]), float(cfg[26].split()[1]))
+=======
+MaxV = max(float(cfg[17].split()[1]), float(cfg[25].split()[1]))
+LeftCnr = float(cfg[5].split()[1]);
+RightCnr = float(cfg[6].split()[1]);
+>>>>>>> upstream/master
 
 if MaxV != 0:
 	plt = open('plotter','r')
@@ -46,6 +52,13 @@ if MaxV != 0:
 			for word in line_arr:
 				plt_lines[i] = plt_lines[i] + word + ' '
 			plt_lines[i] = plt_lines[i] + '\n'
+		if line_arr.count("xrange") == 1:
+			line_arr[2] = str( '[' + str(LeftCnr) + ':' + str(RightCnr) + ']' )
+			plt_lines[i] = ''
+			for word in line_arr:
+				plt_lines[i] = plt_lines[i] + word + ' '
+			plt_lines[i] = plt_lines[i] + '\n'
+
 			
 	plt = open('plotter','w')
 	plt.writelines(plt_lines)
