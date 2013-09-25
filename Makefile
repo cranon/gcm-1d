@@ -1,4 +1,4 @@
-objects = src/Parser.o src/Scene.o src/Body.o src/Mesh.o src/Node.o src/NumMethod.o
+objects = src/Parser.o src/Scene.o src/Body.o src/Mesh.o src/Node.o src/NumMethod.o src/Monitor.o
 
 all: run
 
@@ -22,6 +22,9 @@ Node.o: src/Node.cpp src/Node.h
 	
 NumMethod.o: src/NumMethod.cpp src/NumMethod.h
 	g++ -c src/NumMethod.cpp src/NumMethod.h -o src/NumMethod.o
+	
+Monitor.o: src/Monitor.cpp src/Monitor.h
+	g++ -c src/Monitor.cpp src/Monitor.h -o src/Monitor.o
 	
 .PHONY : clean   
 clean:   

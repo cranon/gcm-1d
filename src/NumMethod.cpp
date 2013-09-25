@@ -48,7 +48,7 @@ int NumMethod::FirstOrder(Mesh *mesh) {
 	float w1, w2;
 	float a_next, a_prev;
 	int i;
-	
+	//float courant = mesh->Values[0].getA()*tau/(mesh->Values[1].x - mesh->Values[0].x);
 		for(i = 1; i < mesh->NumX - 1; i++) {
 			a_next = (mesh->Values[i+1].getA() + mesh->Values[i].getA())/2;
 			a_prev = (mesh->Values[i-1].getA() + mesh->Values[i].getA())/2;
@@ -59,9 +59,12 @@ int NumMethod::FirstOrder(Mesh *mesh) {
 			tmp.v = (w1 + w2)*(a_next + a_prev)/2;
 			if(fabs(tmp.x - mesh->Values[i].x) > fmax(fabs(mesh->Values[i].x - mesh->Values[i-1].x), fabs(mesh->Values[i].x - mesh->Values[i+1].x))/3) { cout << "PIZDEC' X i="<< i << endl; return -1; } 
 			tmp.eps = w2 - w1;
-			if(fabs(tmp.eps) >= 0.000125) cout << "Plastic area" << endl;
 			mesh->Values[i-1] = last;
 			last = tmp;
+			
+		//	if(courant < mesh->Values[i].getA()*tau/(mesh->Values[i].x - mesh->Values[i-1].x)) courant = mesh->Values[i].getA()*tau/(mesh->Values[i].x - mesh->Values[i-1].x);
+		//	if(courant < mesh->Values[i].getA()*tau/(mesh->Values[i+1].x - mesh->Values[i].x)) courant = mesh->Values[i].getA()*tau/(mesh->Values[i+1].x - mesh->Values[i].x);
+			
 		}
 	mesh->Values[mesh->NumX - 1] = FirstOrder_Last(mesh);
 	mesh->Values[mesh->NumX - 2] = last;

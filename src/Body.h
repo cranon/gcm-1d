@@ -1,10 +1,6 @@
-#include "Mesh.h"
 #include "Parser.h"
 #include "NumMethod.h"
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <fstream>
+#include "Monitor.h"
 #ifndef BODY_H
 #define	BODY_H
 
@@ -21,7 +17,9 @@ public:
 					const char * _LeftCnrCond, const char * RightCnrCond);
 	void setParameters(const char *fileName);
 	void printData(int fileNumber);
+	void printData(int fileNumber, struct MonStruct *monStruct);
 	~Body();
+	friend class Scene;
 
 };
 

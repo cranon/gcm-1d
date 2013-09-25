@@ -31,6 +31,11 @@ void Body::printData(int fileNumber) {
 	mesh.printData(fileName);
 }
 
+void Body::printData(int fileNumber, struct MonStruct *monStruct) {
+	sprintf(fileName, "data/Body_1_Step_%i.txt", fileNumber);
+	mesh.printData(fileName, monStruct);
+}
+
 Body::~Body() {
 	cout << "deleting body" << endl;
 }

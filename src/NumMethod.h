@@ -1,7 +1,4 @@
-#include "Node.h"
 #include "Mesh.h"
-#include <cmath>
-#include <iostream>
 
 class NumMethod {
 	float tau;
