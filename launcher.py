@@ -32,7 +32,9 @@ print commands.getoutput('./run -n ' + str(NumT) + ' -t ' + str(maxTau))
 cfgFile = open('body1.txt','r')
 cfg = cfgFile.readlines()
 cfgFile.close()
-MaxV = max(float(cfg[17].split()[1]), float(cfg[25].split()[1]))
+MaxV = math.sqrt((float(cfg[17].split()[1]))**2 + (float(cfg[16].split()[1]))/(float(cfg[15].split()[1]))*(float(cfg[18].split()[1]))**2);
+MaxEps = math.sqrt((float(cfg[18].split()[1]))**2 + (float(cfg[15].split()[1]))/(float(cfg[16].split()[1]))*(float(cfg[17].split()[1]))**2);
+MaxV = MaxEps
 LeftCnr = float(cfg[5].split()[1]);
 RightCnr = float(cfg[6].split()[1]);
 
@@ -43,7 +45,7 @@ if MaxV != 0:
 	for i in range(len(plt_lines)):
 		line_arr = plt_lines[i].split()
 		if line_arr.count("yrange") == 1:
-			line_arr[2] = str( '[-' + str(MaxV*2.5) + ':' + str(MaxV*2.5) + ']' )
+			line_arr[2] = str( '[-' + str(MaxV) + ':' + str(MaxV) + ']' )
 			plt_lines[i] = ''
 			for word in line_arr:
 				plt_lines[i] = plt_lines[i] + word + ' '
