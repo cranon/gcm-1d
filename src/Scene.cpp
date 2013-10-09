@@ -1,8 +1,4 @@
 #include "Scene.h"
-#include <iostream>
-#include <stdlib.h>
-#include <sstream>
-#include <string>
 
 Scene::Scene() {
 	fileNumber = 0;
@@ -20,7 +16,14 @@ int Scene::doNextStep(float maxTau, int methodType) {
 		 * Setting maxTau depends on condition of the stability will be here 
 		 */
 		if(body1.doNextStep(maxTau,methodType,"Previous","Previous") == -1) return -1;
-		body1.printData(fileNumber);
+		Monitor monitor(body1.mesh.NumX, maxTau);
+		monitor.getCourant(&body1.mesh);
+		body1.printData(fileNumber, &monitor.monStruct);
+		if(monitor.MaxV <= 0.1 || monitor.MaxV >= 1.9) {
+			cerr << "Monitor: Courant lies by " << monitor.MaxV << endl;
+			return -1;
+		}
+		
 	}
 }
 
@@ -41,7 +44,7 @@ void Scene::Init(int _NumOfBodies, const char * _ContCond, bool _inContact) {
 		body2.printData(0);
 	}
 	else {
-		cout << "Max number of bodies are 2!" << endl;
+		cout << "Scene: max number of bodies are 2!" << endl;
 		exit(-1);
 	}
 }

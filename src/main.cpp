@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 	scene.Init(1,"",false);
 	for (int i = 0; i < NumT; i++) {
 		if(scene.doNextStep(MaxTau, methodType) == -1) { 
-			cout << "Error on " << i << " time step" << endl; 
+			cerr << "main: error on " << i << " time step" << endl; 
 			return -1; 
 		}
 	}

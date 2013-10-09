@@ -19,13 +19,19 @@ int Body::doNextStep(float tau, int methodType, \
 	 * Choosing number of method and setting extForce depends on type of method, 
 	 * rheology and corner conditions will be here
 	 */
-	NumMethod method(tau);
-	if(method.ImplicitSecondOrder(&mesh) == -1) return -1;
+
+	NumMethod method(&mesh, tau);
+	if(method.SecondOrder() == -1) return -1;
 }
 
 void Body::printData(int fileNumber) {
 	sprintf(fileName, "data/Body_1_Step_%i.txt", fileNumber);
 	mesh.printData(fileName);
+}
+
+void Body::printData(int fileNumber, struct MonStruct *monStruct) {
+	sprintf(fileName, "data/Body_1_Step_%i.txt", fileNumber);
+	mesh.printData(fileName, monStruct);
 }
 
 Body::~Body() {

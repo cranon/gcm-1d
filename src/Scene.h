@@ -1,4 +1,6 @@
 #include "Body.h"
+#include <stdlib.h>
+#include <sstream>
 #ifndef SCENE_H
 #define	SCENE_H
 

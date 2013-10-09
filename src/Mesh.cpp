@@ -21,8 +21,25 @@ void Mesh::printData(const char * fileName) {
 	for (int i = 0; i < NumX; i++) {
 		dataFile << Values[i].num << "	" << Values[i].x << "	" \
 				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].E << " " << Values[i].getRiman(1) << " " << Values[i].getRiman(2) << endl;
+				Values[i].rho << "	" << Values[i].E << endl;
 	}
+	dataFile.close();
+}
+
+void Mesh::printData(const char * fileName, struct MonStruct *monStruct) {
+	ofstream dataFile (fileName, ios::out);
+	int i;
+	for (i = 0; i < monStruct->Num; i++) {
+		dataFile << Values[i].num << "	" << Values[i].x << "	" \
+				<< Values[i].v << "	" << Values[i].eps << "	" << \
+				Values[i].rho << "	" << Values[i].E << " " << monStruct->monArr[i] << endl;
+	}
+	for (i = monStruct->Num; i < NumX; i++) {
+		dataFile << Values[i].num << "	" << Values[i].x << "	" \
+				<< Values[i].v << "	" << Values[i].eps << "	" << \
+				Values[i].rho << "	" << Values[i].E << endl;
+	}
+	cout << fileName << " max = " << monStruct->max << endl;
 	dataFile.close();
 }
 
