@@ -22,6 +22,7 @@ int Body::doNextStep(float tau, int methodType, \
 
 	NumMethod method(&mesh, tau);
 	if(method.SecondOrder() == -1) return -1;
+	//if(method.ImplicitSecondOrder(&mesh) == -1) return -1;
 }
 
 void Body::printData(int fileNumber) {
