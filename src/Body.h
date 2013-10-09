@@ -1,6 +1,6 @@
 #include "Parser.h"
-#include "NumMethod.h"
-#include "Monitor.h"
+#include "calculators/NumMethod.h"
+#include "calculators/Monitor.h"
 #ifndef BODY_H
 #define	BODY_H
 

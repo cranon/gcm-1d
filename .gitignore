@@ -12,7 +12,7 @@
 *.la
 *.a
 
+.gitignore
 data/*
-nbproject/*
 video.avi
 run

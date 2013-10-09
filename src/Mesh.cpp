@@ -39,8 +39,7 @@ void Mesh::printData(const char * fileName, struct MonStruct *monStruct) {
 				<< Values[i].v << "	" << Values[i].eps << "	" << \
 				Values[i].rho << "	" << Values[i].E << endl;
 	}
-	cout << "mean = " << monStruct->mean << endl;
-	cout << "max = " << monStruct->max << endl << endl;
+	cout << fileName << " max = " << monStruct->max << endl;
 	dataFile.close();
 }
 

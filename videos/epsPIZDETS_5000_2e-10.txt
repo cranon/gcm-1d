@@ -1,0 +1,28 @@
+﻿Body1
+plastic
+Left	ZeroV
+Right	ZeroV
+Number_of_nodes	1001
+LeftCorner	0
+RightCorner	0.01
+rho0   7.5e+3
+E0  2e+11
+V0  0
+EPS0  0
+
+wave1
+x1	0.0055
+x2	0.0065
+rho0	7.5e+3
+E0	2e+11
+V_0	100
+EPS_0	0.000001
+
+wave2
+x1	0
+x2	-0.005
+rho0 6e+3
+E0	2e+11
+V_0	0.0
+EPS_0	0.0
+

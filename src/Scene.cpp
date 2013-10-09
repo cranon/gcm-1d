@@ -19,6 +19,11 @@ int Scene::doNextStep(float maxTau, int methodType) {
 		Monitor monitor(body1.mesh.NumX, maxTau);
 		monitor.getCourant(&body1.mesh);
 		body1.printData(fileNumber, &monitor.monStruct);
+		if(monitor.MaxV <= 0.1 || monitor.MaxV >= 1.9) {
+			cerr << "Monitor: Courant lies by " << monitor.MaxV << endl;
+			return -1;
+		}
+		
 	}
 }
 
@@ -39,7 +44,7 @@ void Scene::Init(int _NumOfBodies, const char * _ContCond, bool _inContact) {
 		body2.printData(0);
 	}
 	else {
-		cout << "Max number of bodies are 2!" << endl;
+		cout << "Scene: max number of bodies are 2!" << endl;
 		exit(-1);
 	}
 }

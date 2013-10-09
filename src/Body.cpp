@@ -22,8 +22,8 @@ int Body::doNextStep(float tau, int methodType, \
 	 * Choosing number of method depends on type of method, 
 	 * rheology and corner conditions will be here
 	 */
-	NumMethod method(tau);
-	if(method.FirstOrder(&mesh) == -1) return -1;
+	NumMethod method(&mesh, tau);
+	if(method.SecondOrder() == -1) return -1;
 }
 
 void Body::printData(int fileNumber) {

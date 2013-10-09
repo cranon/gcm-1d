@@ -21,6 +21,7 @@ public:
 	void printData(const char *fileName);
 	void printData(const char *fileName, struct MonStruct *monStruct);
 	friend class NumMethod;
+	friend class Approximator;
 	friend class Monitor;
     ~Mesh();
 };
