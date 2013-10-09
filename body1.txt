@@ -2,22 +2,22 @@ Body1
 elastic
 Left	ZeroV
 Right	ZeroV
-Number_of_nodes	101
+Number_of_nodes	1001
 LeftCorner	0
-RightCorner	1
-rho0   1
-E0  1
+RightCorner	0.01
+rho0   7.5e+3
+E0  2e+11
 V0  0
 EPS0  0
 
 wave1
 #gauss 1 0.2 0.05 
-x1	0.1
-x2	0.2
-rho0	1
-E0	1
-V_0	0.000001
-EPS_0	-0.000001
+x1	0.001
+x2	0.002
+rho0 7.5e+3
+E0 2e+11
+V_0	100
+EPS_0 1e-6
 
 wave2
 gauss 1 0.7 0.05 
