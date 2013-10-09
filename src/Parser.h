@@ -18,11 +18,12 @@ public:
         Parser();
         ~Parser();
         Node *getInitValues(); 
-		void Reading(const char * fileName);
+		int Reading(const char * fileName);
 		int getNumX();
 		string getRheology();
 		string getLeft();
 		string getRight();
+		void setGauss(float a, float sigma, int signOfInv, float *wave);
 };
 
 #endif	/* PARSER_H */

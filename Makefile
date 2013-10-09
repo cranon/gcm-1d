@@ -1,9 +1,10 @@
-objects = src/Parser.o src/Scene.o src/Body.o src/Mesh.o src/Node.o src/NumMethod.o
+objects = src/Parser.o src/Scene.o src/Body.o src/Mesh.o src/Node.o \
+	    src/NumMethod.o  
 
 all: run
 
 run: src/main.cpp $(objects)
-	g++ $(objects) src/main.cpp -o run
+	g++ $(objects) src/main.cpp -o run -O1 -larmadillo
 
 Parser.o: src/Parser.cpp src/Parser.h
 	g++ -c src/Parser.cpp src/Parser.h -o src/Parser.o
@@ -21,8 +22,9 @@ Node.o: src/Node.cpp src/Node.h
 	g++ -c src/Node.cpp src/Node.h -o src/Node.o
 	
 NumMethod.o: src/NumMethod.cpp src/NumMethod.h
-	g++ -c src/NumMethod.cpp src/NumMethod.h -o src/NumMethod.o
+	g++ -c src/NumMethod.cpp src/NumMethod.h -o src/NumMethod.o -O1 -larmadillo
 	
+
 .PHONY : clean   
 clean:   
 	-rm run $(objects)

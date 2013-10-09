@@ -15,7 +15,14 @@ Node::Node(int _num, float _x, float _v, float _eps, float _rho, float _E) {
 Node::~Node() {
 }
 
+float Node::getInv(int i, float A) {
+	if (i == 1) return (A*v - eps);
+	if (i == 2) return (A*v + eps);
+}
+
 float Node::getRiman(int i) {
+	// Return Riman's invariant in this node
+	// For First Order method
 	float a = getA();
 	if(i == 1) return (v - a*eps)/2/a;
 	if(i == 2) return (v + a*eps)/2/a;

@@ -12,5 +12,6 @@ class NumMethod {
 		int FirstOrder(Mesh *mesh);
 		Node FirstOrder_First(Mesh *mesh);
 		Node FirstOrder_Last(Mesh *mesh);
+		int ImplicitSecondOrder(Mesh* mesh);
 };
 
