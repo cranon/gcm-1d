@@ -9,7 +9,6 @@ using namespace std;
 class Body {
 	Mesh mesh;
 	string rheology;
-	string LeftCnrCond, RightCnrCond;
 	char fileName[100];
 public:
 	Body();

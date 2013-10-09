@@ -10,20 +10,19 @@ void Body::setParameters(const char * fileName) {
 	parser.Reading(fileName);
 	rheology = parser.getRheology();
 	mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
-	RightCnrCond = parser.getRight();
-	LeftCnrCond = parser.getLeft();
+	// Fix normal chosing of Corner Conditions parameters!
 }
 
 int Body::doNextStep(float tau, int methodType, \
 						const char * _LeftCnrCond, const char * _RightCnrCond) {
-	if (_LeftCnrCond != "Previous") LeftCnrCond = _LeftCnrCond;
-	if (_RightCnrCond != "Previous") RightCnrCond = _RightCnrCond;
 	/*
-	 * Choosing number of method depends on type of method, 
+	 * Choosing number of method and setting extForce depends on type of method, 
 	 * rheology and corner conditions will be here
 	 */
+
 	NumMethod method(&mesh, tau);
 	if(method.SecondOrder() == -1) return -1;
+	//if(method.ImplicitSecondOrder(&mesh) == -1) return -1;
 }
 
 void Body::printData(int fileNumber) {

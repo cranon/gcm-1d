@@ -10,8 +10,10 @@ all: run
 run: $(MAINFILE) $(OBJECTS)
 	g++ $(OBJECTS) $(MAINFILE) -o run -O1 -larmadillo
 
+
 .cpp.o:
 	g++ $(CFLAGS) $< -o $@
+
 
 .PHONY : clean   
 clean:   
