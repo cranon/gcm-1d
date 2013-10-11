@@ -1,8 +1,7 @@
 #include "Approximator.h"
 
-Approximator::Approximator(Mesh* _mesh, bool _limitor) {
+Approximator::Approximator(Mesh* _mesh) {
 	mesh = _mesh;
-	limitor = _limitor;
 }
 
 Approximator::~Approximator() {
@@ -19,7 +18,7 @@ float Approximator::LinearAppr(int i, float f1, float f2, float x0) {
 }
 
 
-float Approximator::QuadraticAppr(int i, vec* b, float x0) {
+float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 	if(x0 > mesh->Values[i+2].x || x0 < mesh->Values[i].x) {
 		cerr << "QuadraticAppr: wrong 'x0' in " << i << " node" << endl;
 		return -1.0;

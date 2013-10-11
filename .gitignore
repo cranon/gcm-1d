@@ -13,6 +13,7 @@
 *.a
 
 data/*
+video/*
 video.avi
 run
 

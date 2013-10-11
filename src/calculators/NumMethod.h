@@ -8,7 +8,6 @@ class NumMethod {
 	Approximator* proxima;
 	
 	Mesh* mesh;
-	bool limitor;
 	public:
 		NumMethod();
 		NumMethod(Mesh* _mesh, float _tau);
