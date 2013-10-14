@@ -23,7 +23,7 @@ wave2
 #gauss 1 0.7 0.05 
 x1	0.005
 x2	0.01
-rho0 6e+3
+rho0 14e+3
 E0	2e+11
 V_0	0
 EPS_0	0

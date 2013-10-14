@@ -18,6 +18,25 @@ NumMethod::~NumMethod() {
 
 // Left Approximation 'a' in 'num' node by 'order' order
 float NumMethod::lAppA(int num, int order) {
+	vec b;
+	switch(order) {
+		case 0:
+			return mesh->Values[num].getA();
+		case 1:
+			b << this->lAppA(num-1, 0) << this->lAppA(num, 0);
+			return proxima->LinearAppr(num-1, &b, mesh->Values[num].x - tau*lAppA(num, 0));
+		case 2:
+			if(num == 1) {
+				b << this->lAppA(0, 0) << this->lAppA(1, 0) << this->lAppA(2, 0);
+				return proxima->QuadraticAppr(0, &b, mesh->Values[1].x - tau*lAppA(1, 1), false);		
+			}
+			b << this->lAppA(num-2, 0) << this->lAppA(num-1, 0) << this->lAppA(num, 0);
+			return proxima->QuadraticAppr(num-2, &b, mesh->Values[num].x - tau*lAppA(num, 1), false);
+	}
+}
+
+/*
+float NumMethod::lAppA(int num, int order) {
 	switch(order) {
 		case 0:
 			return mesh->Values[num].getA();
@@ -36,23 +55,22 @@ float NumMethod::lAppA(int num, int order) {
 			return proxima->QuadraticAppr(num-2, &b, mesh->Values[num].x - tau*lAppA(num, 1), false);
 	}
 }
+*/
 
 // Right Approximation 'a' in 'num' node by 'order' order
 float NumMethod::rAppA(int num, int order) {
+	vec b;
 	switch(order) {
 		case 0:
 			return mesh->Values[num].getA();
 		case 1:
-			return this->rAppA(num, 0)* \
-				(tau*(this->rAppA(num+1, 0) - this->rAppA(num, 0)) + mesh->Values[num+1].x - mesh->Values[num].x)/ \
-				(mesh->Values[num+1].x - mesh->Values[num].x);
+			b << this->rAppA(num, 0) << this->rAppA(num+1, 0);
+			return proxima->LinearAppr(num, &b, mesh->Values[num].x + tau*rAppA(num, 0));
 		case 2:
 			if(num == mesh->NumX - 2) {
-				vec b;
 				b << this->rAppA(num-1, 0) << this->rAppA(num, 0) << this->rAppA(num+1, 0);
 				return proxima->QuadraticAppr(num-1, &b, mesh->Values[num].x + tau*rAppA(num, 1), false);		
 			}
-			vec b;
 			b << this->rAppA(num, 0) << this->rAppA(num+1, 0) << this->rAppA(num+2, 0);
 			return proxima->QuadraticAppr(num, &b, mesh->Values[num].x + tau*rAppA(num, 1), false);
 	}
@@ -63,7 +81,9 @@ Node NumMethod::FirstOrder_First() {
 	Node tmp = mesh->Values[0];
 	tmp.x = mesh->Values[0].x + tau * mesh->Values[0].v;
 	tmp.v = 0;
-	tmp.eps = 2*proxima->LinearAppr(0, mesh->Values[0].getRiman(2), mesh->Values[1].getRiman(2), tau*rAppA(0, 1) - mesh->Values[0].x);
+	vec b;
+	b << mesh->Values[0].getRiman(2) << mesh->Values[1].getRiman(2);
+	tmp.eps = 2*proxima->LinearAppr(0, &b, mesh->Values[0].x + tau*rAppA(0, 1));
 	return tmp;
 }
 
@@ -83,7 +103,9 @@ Node NumMethod::FirstOrder_Last() {
 	Node tmp = mesh->Values[mesh->NumX - 1];
 	tmp.x = mesh->Values[mesh->NumX - 1].x + tau * mesh->Values[mesh->NumX - 1].v;
 	tmp.v = 0;
-	tmp.eps = -2*proxima->LinearAppr(mesh->NumX-2, mesh->Values[mesh->NumX-2].getRiman(1), mesh->Values[mesh->NumX-1].getRiman(1), mesh->Values[mesh->NumX-1].x - tau*lAppA(mesh->NumX-1, 1));
+	vec b;
+	b << mesh->Values[mesh->NumX-2].getRiman(1) << mesh->Values[mesh->NumX-1].getRiman(1);
+	tmp.eps = -2*proxima->LinearAppr(mesh->NumX-2, &b, mesh->Values[mesh->NumX-1].x - tau*lAppA(mesh->NumX-1, 1));
 	return tmp;
 }
 
@@ -103,13 +125,16 @@ int NumMethod::FirstOrder() {
 	Node last = FirstOrder_First();
 	Node tmp;
 	float w1, w2;
+	vec b;
 	int i;
 		for(i = 1; i < mesh->NumX - 1; i++) {
 			tmp = mesh->Values[i];
 			tmp.x = mesh->Values[i].x + tau*mesh->Values[i].v;
 			
-			w1 = proxima->LinearAppr(i-1, mesh->Values[i-1].getRiman(1), mesh->Values[i].getRiman(1), mesh->Values[i].x - tau*lAppA(i, 1));
-			w2 = proxima->LinearAppr(i, mesh->Values[i].getRiman(2), mesh->Values[i+1].getRiman(2), mesh->Values[i].x + tau*rAppA(i, 1));
+			b << mesh->Values[i-1].getRiman(1) << mesh->Values[i].getRiman(1);
+			w1 = proxima->LinearAppr(i-1, &b, mesh->Values[i].x - tau*lAppA(i, 1));
+			b << mesh->Values[i].getRiman(2) << mesh->Values[i+1].getRiman(2);
+			w2 = proxima->LinearAppr(i, &b, mesh->Values[i].x + tau*rAppA(i, 1));
 			
 			tmp.v = w1*lAppA(i, 1) + w2*rAppA(i, 1);
 			

@@ -3,11 +3,9 @@
 
 class NumMethod {
 	float tau;
-	
-	// Every NumMethod has his own approximator
 	Approximator* proxima;
-	
 	Mesh* mesh;
+	
 	public:
 		NumMethod();
 		NumMethod(Mesh* _mesh, float _tau);
