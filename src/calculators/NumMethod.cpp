@@ -17,45 +17,24 @@ NumMethod::~NumMethod() {
 }
 
 // Left Approximation 'a' in 'num' node by 'order' order
+/*
 float NumMethod::lAppA(int num, int order) {
 	vec b;
 	switch(order) {
 		case 0:
 			return mesh->Values[num].getA();
 		case 1:
-			b << this->lAppA(num-1, 0) << this->lAppA(num, 0);
-			return proxima->LinearAppr(num-1, &b, mesh->Values[num].x - tau*lAppA(num, 0));
+			b << mesh->Values[num-1].getA() << mesh->Values[num].getA();
+			return proxima->LinearAppr(num-1, &b, mesh->Values[num].x - tau*mesh->Values[num].getA());
 		case 2:
 			if(num == 1) {
-				b << this->lAppA(0, 0) << this->lAppA(1, 0) << this->lAppA(2, 0);
+				b << mesh->Values[0].getA() << mesh->Values[1].getA() << mesh->Values[2].getA();
 				return proxima->QuadraticAppr(0, &b, mesh->Values[1].x - tau*lAppA(1, 1), false);		
 			}
-			b << this->lAppA(num-2, 0) << this->lAppA(num-1, 0) << this->lAppA(num, 0);
+			b << mesh->Values[num-2].getA() << mesh->Values[num-1].getA() << mesh->Values[num].getA();
 			return proxima->QuadraticAppr(num-2, &b, mesh->Values[num].x - tau*lAppA(num, 1), false);
 	}
-}
-
-/*
-float NumMethod::lAppA(int num, int order) {
-	switch(order) {
-		case 0:
-			return mesh->Values[num].getA();
-		case 1:
-			return this->lAppA(num, 0)*
-				(tau*(this->lAppA(num-1, 0) - this->lAppA(num, 0)) + mesh->Values[num].x - mesh->Values[num-1].x)/ \
-				(mesh->Values[num].x - mesh->Values[num-1].x);
-		case 2:
-			if(num == 1) {
-				vec b;
-				b << this->lAppA(0, 0) << this->lAppA(1, 0) << this->lAppA(2, 0);
-				return proxima->QuadraticAppr(0, &b, mesh->Values[1].x - tau*lAppA(1, 1), false);		
-			}
-			vec b;
-			b << this->lAppA(num-2, 0) << this->lAppA(num-1, 0) << this->lAppA(num, 0);
-			return proxima->QuadraticAppr(num-2, &b, mesh->Values[num].x - tau*lAppA(num, 1), false);
-	}
-}
-*/
+}  
 
 // Right Approximation 'a' in 'num' node by 'order' order
 float NumMethod::rAppA(int num, int order) {
@@ -65,14 +44,94 @@ float NumMethod::rAppA(int num, int order) {
 			return mesh->Values[num].getA();
 		case 1:
 			b << this->rAppA(num, 0) << this->rAppA(num+1, 0);
-			return proxima->LinearAppr(num, &b, mesh->Values[num].x + tau*rAppA(num, 0));
+			return proxima->LinearAppr(num, &b, mesh->Values[num].x + tau*mesh->Values[num].getA());
 		case 2:
 			if(num == mesh->NumX - 2) {
-				b << this->rAppA(num-1, 0) << this->rAppA(num, 0) << this->rAppA(num+1, 0);
+				b << mesh->Values[num-1].getA() << mesh->Values[num].getA() << mesh->Values[num+1].getA();
 				return proxima->QuadraticAppr(num-1, &b, mesh->Values[num].x + tau*rAppA(num, 1), false);		
 			}
-			b << this->rAppA(num, 0) << this->rAppA(num+1, 0) << this->rAppA(num+2, 0);
+			b << mesh->Values[num].getA() << mesh->Values[num+1].getA() << mesh->Values[num+2].getA();
 			return proxima->QuadraticAppr(num, &b, mesh->Values[num].x + tau*rAppA(num, 1), false);
+	}
+}
+*/
+float NumMethod::lAppA(int num, int order) {
+	vec b;
+	vec X;
+	switch(order) {
+		case 0:
+			return mesh->Values[num].getA();
+		case 1:
+			b << mesh->Values[num-1].getA() << mesh->Values[num].getA();
+			X = proxima->LinearAppr(num-1, &b);
+			return (X(0)*mesh->Values[num].x + X(1))/(1 + X(0)*tau);
+		case 2:
+			double x1;
+			double x2;
+			if(num == 1) {
+				b << mesh->Values[0].getA() << mesh->Values[1].getA() << mesh->Values[2].getA();
+				X = proxima->QuadraticAppr(0, &b);
+				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[1].x + tau*X(1) + 1), X(0)*mesh->Values[1].x*mesh->Values[1].x + X(1)*mesh->Values[1].x + X(2), &x1, &x2);
+				if(x1 - x2 >= 0 && x2 > 0) return x2;
+				else if(x1 > 0) return x1;
+				else {
+					cout << "Not found a right root. Step = " << num << endl;
+					return 1000000.0; // Rassipalis'
+				}
+			} else {
+				b << mesh->Values[num-2].getA() << mesh->Values[num-1].getA() << mesh->Values[num].getA();
+				X = proxima->QuadraticAppr(num-2, &b);
+				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[num].x + tau*X(1) + 1), X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
+				float h1 = fabs(mesh->Values[num].x - x1*tau - mesh->Values[num-1].x);
+				float h2 = fabs(mesh->Values[num].x - x2*tau - mesh->Values[num-1].x);
+				if(fmin(h1, h2) < fmin(mesh->Values[num].x - mesh->Values[num-1].x, mesh->Values[num-1].x - mesh->Values[num-2].x)) {
+					if(h1 <= h2) return x1;
+					else return x2;
+				} else {
+					cout << "Not found a right root. Step = " << num << endl;
+					return 1000000.0; // Rassipalis'
+				}
+			}
+	}
+}
+
+float NumMethod::rAppA(int num, int order) {
+	vec b;
+	vec X;
+	switch(order) {
+		case 0:
+			return mesh->Values[num].getA();
+		case 1:
+			b << mesh->Values[num].getA() << mesh->Values[num+1].getA();
+			X = proxima->LinearAppr(num, &b);
+			return (X(0)*mesh->Values[num].x + X(1))/(1 - X(0)*tau);
+		case 2:
+			double x1;
+			double x2;
+			if(num == mesh->NumX - 2) {
+				b << mesh->Values[num-1].getA() << mesh->Values[num].getA() << mesh->Values[num+1].getA();
+				X = proxima->QuadraticAppr(num-1, &b);
+				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
+				if(x1 - x2 >= 0 && x2 > 0) return x2;
+				else if(x1 > 0) return x1;
+				else {
+					cout << "Not found a right root. Step = " << num << endl;
+					return 1000000.0; // Rassipalis'
+				}
+			} else {
+				b << mesh->Values[num].getA() << mesh->Values[num+1].getA() << mesh->Values[num+2].getA();
+				X = proxima->QuadraticAppr(num, &b);
+				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
+				float h1 = fabs(mesh->Values[num+1].x - x1*tau - mesh->Values[num].x);
+				float h2 = fabs(mesh->Values[num+1].x - x2*tau - mesh->Values[num].x);
+				if(fmin(h1, h2) < fmin(mesh->Values[num+2].x - mesh->Values[num+1].x, mesh->Values[num+1].x - mesh->Values[num].x)) {
+					if(h1 <= h2) return x1;
+					else return x2;
+				} else {
+					cout << "Not found a right root. Step = " << num << endl;
+					return 1000000.0; // Rassipalis'
+				}
+			}
 	}
 }
 

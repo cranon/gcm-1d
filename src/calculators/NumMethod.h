@@ -1,5 +1,6 @@
 #include "../Mesh.h"
 #include "Approximator.h"
+#include <gsl/gsl_poly.h>
 
 class NumMethod {
 	float tau;

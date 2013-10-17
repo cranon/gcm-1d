@@ -1,7 +1,6 @@
 #include "Monitor.h"
 
 Monitor::Monitor() {	
-
 }
 
 Monitor::Monitor(int _Num, float _tau) {
@@ -63,11 +62,6 @@ void Monitor::getCourant(Mesh *mesh) {
 	
 	monStruct.mean = monStruct.mean/(mesh->NumX);
 	if(monStruct.max > MaxV) MaxV = monStruct.max;
-	
-	if(fabs(monStruct.monArr[mesh->NumX-2]) >= 1 || fabs(monStruct.monArr[1]) >= 1) {
-		cout << "Monitor: it's possible that characteristic is out of body" << endl;
-		MaxV = 0;
-	}
 }
 
 Monitor::~Monitor() {

@@ -6,15 +6,14 @@ OBJECTS=$(SOURCES:.cpp=.o)
 MAINFILE=$(OBJDIR)main.cpp
 
 all: run
-    
+
 run: $(MAINFILE) $(OBJECTS)
-	g++ $(OBJECTS) $(MAINFILE) -o run -O1 -larmadillo
+	g++ $(OBJECTS) $(MAINFILE) -lgsl -lgslcblas -lm -o run -O1 -larmadillo
 
 
 .cpp.o:
 	g++ $(CFLAGS) $< -o $@
-
-
+	
 .PHONY : clean   
 clean:   
 	-rm run $(OBJECTS)
