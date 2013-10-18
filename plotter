@@ -2,5 +2,5 @@ reset
 set term jpeg
 set xrange [0.0:0.01] 
 set yrange [-20.0000026667:20.0000026667] 
-set output "data/plots/Plot_1000.jpeg" 
-plot "data/Body_1_Step_1000.txt" using 2:3 with lines 
+set output "data/plots/Plot_2000.jpeg" 
+plot "data/Body_1_Step_2000.txt" using 2:3 with lines 
