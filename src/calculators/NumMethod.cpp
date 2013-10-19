@@ -72,11 +72,14 @@ float NumMethod::lAppA(int num, int order) {
 				b << mesh->Values[0].getA() << mesh->Values[1].getA() << mesh->Values[2].getA();
 				X = proxima->QuadraticAppr(0, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[1].x + tau*X(1) + 1), X(0)*mesh->Values[1].x*mesh->Values[1].x + X(1)*mesh->Values[1].x + X(2), &x1, &x2);
-				if(x1 - x2 >= 0 && x2 > 0) return x2;
-				else if(x1 > 0) return x1;
-				else {
+				float h1 = fabs(mesh->Values[num].x - x1*tau - mesh->Values[num-1].x);
+				float h2 = fabs(mesh->Values[num].x - x2*tau - mesh->Values[num-1].x);
+				if(fmin(h1, h2) < mesh->Values[num].x - mesh->Values[num-1].x) {
+					if(h1 <= h2) return x1;
+					else return x2;
+				} else {
 					cout << "Not found a right root. Step = " << num << endl;
-					return 1000000.0; // Rassipalis'
+					exit(-1); // STOP
 				}
 			} else {
 				b << mesh->Values[num-2].getA() << mesh->Values[num-1].getA() << mesh->Values[num].getA();
@@ -89,7 +92,7 @@ float NumMethod::lAppA(int num, int order) {
 					else return x2;
 				} else {
 					cout << "Not found a right root. Step = " << num << endl;
-					return 1000000.0; // Rassipalis'
+					exit(-1); // STOP
 				}
 			}
 	}
@@ -112,11 +115,14 @@ float NumMethod::rAppA(int num, int order) {
 				b << mesh->Values[num-1].getA() << mesh->Values[num].getA() << mesh->Values[num+1].getA();
 				X = proxima->QuadraticAppr(num-1, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
-				if(x1 - x2 >= 0 && x2 > 0) return x2;
-				else if(x1 > 0) return x1;
-				else {
+				float h1 = fabs(mesh->Values[num+1].x - x1*tau - mesh->Values[num].x);
+				float h2 = fabs(mesh->Values[num+1].x - x2*tau - mesh->Values[num].x);
+				if(fmin(h1, h2) < mesh->Values[num+1].x - mesh->Values[num].x) {
+					if(h1 <= h2) return x1;
+					else return x2;
+				} else {
 					cout << "Not found a right root. Step = " << num << endl;
-					return 1000000.0; // Rassipalis'
+					exit(-1); // STOP
 				}
 			} else {
 				b << mesh->Values[num].getA() << mesh->Values[num+1].getA() << mesh->Values[num+2].getA();
@@ -129,7 +135,7 @@ float NumMethod::rAppA(int num, int order) {
 					else return x2;
 				} else {
 					cout << "Not found a right root. Step = " << num << endl;
-					return 1000000.0; // Rassipalis'
+					exit(-1); // STOP
 				}
 			}
 	}

@@ -11,7 +11,7 @@ Approximator::~Approximator() {
 float Approximator::LinearAppr(int i, vec* b, float x0) {
 	if(x0 > mesh->Values[i+1].x || x0 < mesh->Values[i].x) {
 		cerr << "LinearAppr: wrong 'x0' in " << i << " node" << endl;
-		return -1.0;
+		exit(-1); // STOP
 	}
 	mat A;
 	A << mesh->Values[i].x << 1 << endr
@@ -31,7 +31,7 @@ vec Approximator::LinearAppr(int i, vec* b) {
 float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 	if(x0 > mesh->Values[i+2].x || x0 < mesh->Values[i].x) {
 		cerr << "QuadraticAppr: wrong 'x0' in " << i << " node" << endl;
-		return -1.0;
+		exit(-1); // STOP
 	}
 	mat A;
 	A << (mesh->Values[i].x)*(mesh->Values[i].x) << mesh->Values[i].x << 1 << endr 

@@ -1,5 +1,6 @@
 #include "Node.h"
 #include <fstream>
+#include <cstdlib>
 #ifndef MESH_H
 #define	MESH_H
 
