@@ -13,8 +13,7 @@
 *.a
 
 data/*
-video/*
-video.avi
+nbproject/*
+*.avi
 run
-log
-
+*~
