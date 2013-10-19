@@ -66,14 +66,14 @@ int Parser::Reading(const char * fileName) {
 				cfg >> scfg;
 			    wave1[i] = atof(scfg.c_str());
 			}
-			if (wave1[1] < wave1[0]) return 0;
+			if (wave1[1] >= wave1[0]) {
 			for (int i = 0; i < NumX; i++) {
 			if ((InitValues[i].x >= wave1[0]) && (InitValues[i].x <= wave1[1])) {
 				InitValues[i].v = wave1[4];
 				InitValues[i].eps = wave1[5];
 				InitValues[i].E = wave1[3];
 				InitValues[i].rho = wave1[2];
-			}}
+			}}}
 		}
         
         cfg >> scfg;
@@ -102,17 +102,40 @@ int Parser::Reading(const char * fileName) {
 				cfg >> scfg;
 			    wave2[i] = atof(scfg.c_str());
 			}
-			if (wave2[1] < wave2[0]) return 0;
+			if (wave2[1] >= wave2[0]) {
 			for (int i = 0; i < NumX; i++) {
 			if ((InitValues[i].x >= wave2[0]) && (InitValues[i].x <= wave2[1])) {
 				InitValues[i].v = wave2[4];
 				InitValues[i].eps = wave2[5];
 				InitValues[i].E = wave2[3];
 				InitValues[i].rho = wave2[2];
-			}}
+			}}}
 		}
 		
         cfg.close();
+		
+		// Layer structure
+		
+		float rho0 = body[2];
+		int NumOfLayers = 3;
+		int NumOfPeriods = 1;
+		int a = NumX/NumOfPeriods;
+		int b = a/NumOfLayers;
+		int m;
+		for (int n = 0; n < NumOfPeriods; n++) {
+			for (m = 0; m < NumOfLayers; m++) {
+				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
+					InitValues[i].rho =	rho0*(m+1);
+				} 
+			}
+			while(i < NumX) {
+				InitValues[i].rho =	rho0*(m);
+				i++;
+			}
+		}
+		
+		// Layer structure
+
 }
     
 Node *Parser::getInitValues() {
