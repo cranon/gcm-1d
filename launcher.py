@@ -44,7 +44,7 @@ if MaxV != 0:
 	for i in range(len(plt_lines)):
 		line_arr = plt_lines[i].split()
 		if line_arr.count("yrange") == 1:
-			line_arr[2] = str( '[-' + str(2*MaxEps) + ':' + str(2*MaxEps) + ']' )
+			line_arr[2] = str( '[-' + str(2*MaxV) + ':' + str(2*MaxV) + ']' )
 			plt_lines[i] = ''
 			for word in line_arr:
 				plt_lines[i] = plt_lines[i] + word + ' '

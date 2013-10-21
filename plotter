@@ -2,9 +2,9 @@ reset
 set term jpeg
 set parametric
 set xrange [0.0:0.01] 
-set yrange [-2.82843320586e-06:2.82843320586e-06] 
-set trange [-1.0:1.0]
+set yrange [-2.00002666649:2.00002666649] 
+set trange [-1:1]
 set output "data/plots/Plot_1000.jpeg" 
 a = 0.00333333
 b = 0.00666666
-plot "data/Body_1_Step_1000.txt" using 2:4 with lines, a,t, b,t 
+plot "data/Body_1_Step_1000.txt" using 2:3 with lines, a,t, b,t 
