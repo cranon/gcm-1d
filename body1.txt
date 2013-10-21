@@ -1,5 +1,5 @@
 Body1
-elastic
+plastic
 Left	ZeroV
 Right	ZeroV
 Number_of_nodes	1001
@@ -12,12 +12,12 @@ EPS0  0
 
 wave1
 #gauss 1 0.001 0.00005 
-x1	0.009
-x2	0.0099
+x1	0.004
+x2	0.005
 rho0 7.5e+3
 E0 2e+11
-V_0	5164e-6
-EPS_0 1e-6
+V_0	100
+EPS_0 0.00
 
 wave2
 #gauss 1 0.7 0.05 

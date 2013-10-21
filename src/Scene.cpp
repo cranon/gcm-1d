@@ -12,16 +12,17 @@ Scene::~Scene() {
 int Scene::doNextStep(float maxTau, int methodType) {
 	fileNumber = fileNumber + 1;
 	if (NumOfBodies == 1) {
-		Monitor monitor(body1.mesh.NumX, maxTau);
-		monitor.getCourant(&body1.mesh);
+		float temp;
+		do {
+			body1._mesh = body1.mesh;
+			if(body1.doNextStep(maxTau,methodType,"Previous","Previous") == -1) return -1;	
+			Monitor monitor(body1._mesh.NumX, maxTau);
+			monitor.getCourant(&body1._mesh);
+			temp = monitor.monStruct.max;
+			if(temp > 0.9) maxTau = maxTau * 0.9 / temp;
+		} while(temp > 0.9);
+		body1.mesh = body1._mesh;
 		cout << "maxTau = " << maxTau << endl;
-		if(monitor.monStruct.max > 0.9) maxTau = maxTau * 0.9 / monitor.monStruct.max;
-		cout << "maxTau = " << maxTau << endl;
-		/*if(monitor.MaxV <= 0.1 || monitor.MaxV >= 1.9) {
-			cerr << "Monitor: Courant lies by " << monitor.MaxV << endl;
-			return -1;
-		}*/
-		if(body1.doNextStep(maxTau,methodType,"Previous","Previous") == -1) return -1;		
 		body1.printData(fileNumber);
 	}
 }

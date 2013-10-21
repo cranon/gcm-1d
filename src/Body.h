@@ -8,6 +8,7 @@ using namespace std;
 
 class Body {
 	Mesh mesh;
+	Mesh _mesh;
 	string rheology;
 	char fileName[100];
 public:

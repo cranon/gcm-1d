@@ -6,6 +6,18 @@ Mesh::Mesh() {
 		cout << "empty constructor of mesh" << endl;
 }
 
+Node Mesh::getNode(int i) {
+	return Values[i];
+}
+
+Mesh Mesh::operator= (Mesh mesh2) {
+	NumX = mesh2.NumX;
+	for (int i = 0; i < NumX; i++){
+		Values[i] = mesh2.getNode(i);
+	}
+	// ??? return *this;
+}
+
 void Mesh::setParameters(Node *InitValues, int _NumX, string _rheology) {
 	cout << "setting par-s of mesh" << endl;
 	NumX = _NumX;
