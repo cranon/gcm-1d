@@ -34,6 +34,9 @@ cfg = cfgFile.readlines()
 cfgFile.close()
 MaxV = math.sqrt((float(cfg[18].split()[1]))**2 + (float(cfg[17].split()[1]))/(float(cfg[16].split()[1]))*(float(cfg[19].split()[1]))**2);
 MaxEps = math.sqrt((float(cfg[19].split()[1]))**2 + (float(cfg[16].split()[1]))/(float(cfg[17].split()[1]))*(float(cfg[18].split()[1]))**2);
+rheology = cfg[1].split()[0]
+if (rheology == 'plastic'):
+	MaxV = MaxV*3
 LeftCnr = float(cfg[5].split()[1]);
 RightCnr = float(cfg[6].split()[1]);
 

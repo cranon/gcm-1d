@@ -8,3 +8,4 @@ set output "data/plots/Plot_1000.jpeg"
 a = 0.00333333
 b = 0.00666666
 plot "data/Body_1_Step_1000.txt" using 2:3 with lines, a,t, b,t 
+
