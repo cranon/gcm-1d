@@ -14,15 +14,17 @@ int Scene::doNextStep(float maxTau, int methodType) {
 	if (NumOfBodies == 1) {
 		float temp;
 		do {
-			body1._mesh = body1.mesh;
+			body1._mesh = &(body1.mesh);
 			if(body1.doNextStep(maxTau,methodType,"Previous","Previous") == -1) return -1;	
 			Monitor monitor(body1._mesh.NumX, maxTau);
 			monitor.getCourant(&body1._mesh);
 			temp = monitor.monStruct.max;
-			if(temp > 0.9) maxTau = maxTau * 0.9 / temp;
+			if(temp > 0.9) {
+				maxTau = maxTau * 0.9 / temp;
+				cout << "maxTau = " << maxTau << endl;
+			}
 		} while(temp > 0.9);
-		body1.mesh = body1._mesh;
-		cout << "maxTau = " << maxTau << endl;
+		body1.mesh = &(body1._mesh);
 		body1.printData(fileNumber);
 	}
 }

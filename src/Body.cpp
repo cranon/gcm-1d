@@ -10,6 +10,7 @@ void Body::setParameters(const char * fileName) {
 	parser.Reading(fileName);
 	rheology = parser.getRheology();
 	mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
+	_mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
 	// Fix normal chosing of Corner Conditions parameters!
 }
 

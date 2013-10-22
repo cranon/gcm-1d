@@ -66,36 +66,45 @@ float NumMethod::lAppA(int num, int order) {
 			X = proxima->LinearAppr(num-1, &b);
 			return (X(0)*mesh->Values[num].x + X(1))/(1 + X(0)*tau);
 		case 2:
-			double x1;
-			double x2;
+			double x1 = 0.0;
+			double x2 = 0.0;
+			double x0 = lAppA(num, 1);
+			double h = 0.0;
 			if(num == 1) {
 				b << mesh->Values[0].getA() << mesh->Values[1].getA() << mesh->Values[2].getA();
 				X = proxima->QuadraticAppr(0, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[1].x + tau*X(1) + 1), X(0)*mesh->Values[1].x*mesh->Values[1].x + X(1)*mesh->Values[1].x + X(2), &x1, &x2);
-				float h1 = fabs(mesh->Values[num].x - x1*tau - mesh->Values[num-1].x);
-				float h2 = fabs(mesh->Values[num].x - x2*tau - mesh->Values[num-1].x);
-				if(fmin(h1, h2) < mesh->Values[num].x - mesh->Values[num-1].x) {
-					if(h1 <= h2) return x1;
-					else return x2;
+				if(x1*x2 == 0.0) return x0;
+				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+					if(x1 >= fmin(mesh->Values[1].getA(), mesh->Values[0].getA()) && x1 <= fmax(mesh->Values[1].getA(), mesh->Values[0].getA())) return x1;
+					else return x0;
 				} else {
-					cout << "Not found a right root. Step = " << num << endl;
-					exit(-1); // STOP
+					if(x2 >= fmin(mesh->Values[1].getA(), mesh->Values[0].getA()) && x1 <= fmax(mesh->Values[1].getA(), mesh->Values[0].getA())) return x2;
+					else return x0;
 				}
 			} else {
 				b << mesh->Values[num-2].getA() << mesh->Values[num-1].getA() << mesh->Values[num].getA();
 				X = proxima->QuadraticAppr(num-2, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[num].x + tau*X(1) + 1), X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
-				float h1 = fabs(mesh->Values[num].x - x1*tau - mesh->Values[num-1].x);
-				float h2 = fabs(mesh->Values[num].x - x2*tau - mesh->Values[num-1].x);
-				if(fmin(h1, h2) <= (mesh->Values[num].x - mesh->Values[num-1].x)) {
-					if(h1 <= h2) return x1;
-					else return x2;
+				if(x1*x2 == 0.0) return x0;
+				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+					h = mesh->Values[num].x - mesh->Values[num-1].x - x1*tau;
+					if(h > 0) {
+						if(x1 >= fmin(mesh->Values[num].getA(), mesh->Values[num-1].getA()) && x1 <= fmax(mesh->Values[num].getA(), mesh->Values[num-1].getA())) return x1;
+						else return x0;
+					} else if(h < 0) {
+						if(x1 >= fmin(mesh->Values[num-1].getA(), mesh->Values[num-2].getA()) && x1 <= fmax(mesh->Values[num-1].getA(), mesh->Values[num-2].getA())) return x1;
+						else return x0;
+					} else return mesh->Values[num-1].getA();
 				} else {
-					cout << "Not found a right root. L. Step = " << num << endl;
-					cout << x1 << "\t" << x2 << endl;
-					cout << b << endl;
-					cout << X;
-					exit(-1); // STOP
+					h = mesh->Values[num].x - mesh->Values[num-1].x - x2*tau;
+					if(h > 0) {
+						if(x2 >= fmin(mesh->Values[num].getA(), mesh->Values[num-1].getA()) && x2 <= fmax(mesh->Values[num].getA(), mesh->Values[num-1].getA())) return x2;
+						else return x0;
+					} else if(h < 0) {
+						if(x2 >= fmin(mesh->Values[num-1].getA(), mesh->Values[num-2].getA()) && x2 <= fmax(mesh->Values[num-1].getA(), mesh->Values[num-2].getA())) return x2;
+						else return x0;
+					} else return mesh->Values[num-1].getA();
 				}
 			}
 	}
@@ -112,36 +121,45 @@ float NumMethod::rAppA(int num, int order) {
 			X = proxima->LinearAppr(num, &b);
 			return (X(0)*mesh->Values[num].x + X(1))/(1 - X(0)*tau);
 		case 2:
-			double x1;
-			double x2;
+			double x1 = 0.0;
+			double x2 = 0.0;
+			double x0 = rAppA(num, 1);
+			double h = 0.0;
 			if(num == mesh->NumX - 2) {
 				b << mesh->Values[num-1].getA() << mesh->Values[num].getA() << mesh->Values[num+1].getA();
 				X = proxima->QuadraticAppr(num-1, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
-				float h1 = fabs(mesh->Values[num+1].x - x1*tau - mesh->Values[num].x);
-				float h2 = fabs(mesh->Values[num+1].x - x2*tau - mesh->Values[num].x);
-				if(fmin(h1, h2) < mesh->Values[num+1].x - mesh->Values[num].x) {
-					if(h1 <= h2) return x1;
-					else return x2;
+				if(x1*x2 == 0.0) return x0;
+				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+					if(x1 >= fmin(mesh->Values[num].getA(), mesh->Values[num+1].getA()) && x1 <= fmax(mesh->Values[num].getA(), mesh->Values[num+1].getA())) return x1;
+					else return x0;
 				} else {
-					cout << "Not found a right root. Step = " << num << endl;
-					exit(-1); // STOP
+					if(x2 >= fmin(mesh->Values[num].getA(), mesh->Values[num+1].getA()) && x2 <= fmax(mesh->Values[num].getA(), mesh->Values[num+1].getA())) return x2;
+					else return x0;
 				}
 			} else {
 				b << mesh->Values[num].getA() << mesh->Values[num+1].getA() << mesh->Values[num+2].getA();
 				X = proxima->QuadraticAppr(num, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
-				float h1 = fabs(mesh->Values[num+1].x - x1*tau - mesh->Values[num].x);
-				float h2 = fabs(mesh->Values[num+1].x - x2*tau - mesh->Values[num].x);
-				if(fmin(h1, h2) <= (mesh->Values[num+1].x - mesh->Values[num].x)) {
-					if(h1 <= h2) return x1;
-					else return x2;
+				if(x1*x2 == 0.0) return x0;
+				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+					h = mesh->Values[num+1].x - mesh->Values[num].x - x1*tau;
+					if(h > 0) {
+						if(x1 >= fmin(mesh->Values[num+1].getA(), mesh->Values[num].getA()) && x1 <= fmax(mesh->Values[num+1].getA(), mesh->Values[num].getA())) return x1;
+						else return x0;
+					} else if(h < 0) {
+						if(x1 >= fmin(mesh->Values[num+2].getA(), mesh->Values[num+1].getA()) && x1 <= fmax(mesh->Values[num+2].getA(), mesh->Values[num+1].getA())) return x1;
+						else return x0;
+					} else return mesh->Values[num+1].getA();
 				} else {
-					cout << "Not found a right root. R. Step = " << num << endl;
-					cout << x1 << "\t" << x2 << endl;
-					cout << b << endl;
-					cout << X;
-					exit(-1); // STOP
+					h = mesh->Values[num+1].x - mesh->Values[num].x - x2*tau;
+					if(h > 0) {
+						if(x2 >= fmin(mesh->Values[num+1].getA(), mesh->Values[num].getA()) && x2 <= fmax(mesh->Values[num+1].getA(), mesh->Values[num].getA())) return x2;
+						else return x0;
+					} else if(h < 0) {
+						if(x2 >= fmin(mesh->Values[num+2].getA(), mesh->Values[num+1].getA()) && x2 <= fmax(mesh->Values[num-1].getA(), mesh->Values[num-2].getA())) return x2;
+						else return x0;
+					} else return mesh->Values[num+1].getA();
 				}
 			}
 	}
@@ -252,7 +270,7 @@ int NumMethod::SecondOrder() {
 		b << mesh->Values[i].getRiman(2) << mesh->Values[i+1].getRiman(2) << mesh->Values[i+2].getRiman(2);
 		w2 = proxima->QuadraticAppr(i, &b, mesh->Values[i].x + tau*rAppA(i, 2), true);
 		
-		if(max(rAppA(i, 2), lAppA(i, 2)) > 5170.0) cout << max(rAppA(i, 2), lAppA(i, 2));
+		//if(max(rAppA(i, 2), lAppA(i, 2)) > 5170.0) cout << max(rAppA(i, 2), lAppA(i, 2));
 		
 		tmp.v = w1*lAppA(i, 2) + w2*rAppA(i, 2);
 		tmp.eps = w2 - w1;

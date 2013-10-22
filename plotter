@@ -4,8 +4,10 @@ set parametric
 set xrange [0.0:0.01] 
 set yrange [-2.00002666649:2.00002666649] 
 set trange [-1:1]
-set output "data/plots/Plot_1000.jpeg" 
-a = 0.00333333
-b = 0.00666666
-plot "data/Body_1_Step_1000.txt" using 2:3 with lines, a,t, b,t 
+set output "data/plots/Plot_5000.jpeg" 
+a = 0.002
+b = 0.004
+c = 0.006
+d = 0.008
+plot "data/Body_1_Step_5000.txt" using 2:3 with lines, a,t, b,t, c,t, d,t 
 

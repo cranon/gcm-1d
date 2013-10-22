@@ -13,7 +13,7 @@ struct MonStruct {
 };
 
 class Mesh {
-    Node *Values;
+	Node *Values;
     string rheology;
 public:
     int NumX;
@@ -21,7 +21,7 @@ public:
     void setParameters(Node *InitValues, int _NumX, string _rheology);
 	void printData(const char *fileName);
 	void printData(const char *fileName, struct MonStruct *monStruct);
-	Mesh operator= (Mesh mesh2);
+	void operator= (Mesh *mesh2);
 	Node getNode(int i);
 	friend class NumMethod;
 	friend class Approximator;

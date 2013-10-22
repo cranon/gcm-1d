@@ -10,12 +10,12 @@ Node Mesh::getNode(int i) {
 	return Values[i];
 }
 
-Mesh Mesh::operator= (Mesh mesh2) {
-	NumX = mesh2.NumX;
-	for (int i = 0; i < NumX; i++){
-		Values[i] = mesh2.getNode(i);
+void Mesh::operator=(Mesh* mesh2) {
+	NumX = mesh2->NumX;
+	rheology = mesh2->rheology;
+	for (int i = 0; i < NumX; i++) {
+		Values[i] = mesh2->getNode(i);
 	}
-	// ??? return *this;
 }
 
 void Mesh::setParameters(Node *InitValues, int _NumX, string _rheology) {

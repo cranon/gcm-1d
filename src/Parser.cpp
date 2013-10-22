@@ -115,9 +115,9 @@ int Parser::Reading(const char * fileName) {
         cfg.close();
 		
 		// Layer structure
-/*		
+		
 		float rho0 = body[2];
-		int NumOfLayers = 3;
+		int NumOfLayers = 5;
 		int NumOfPeriods = 1;
 		int a = NumX/NumOfPeriods;
 		int b = a/NumOfLayers;
@@ -133,7 +133,7 @@ int Parser::Reading(const char * fileName) {
 				i++;
 			}
 		}
-*/		
+		
 		// Layer structure
 
 }
