@@ -2,12 +2,14 @@ reset
 set term jpeg
 set parametric
 set xrange [0.0:0.01] 
-set yrange [-2.00002666649:2.00002666649] 
+set yrange [-0.0232379004215:0.0232379004215] 
 set trange [-1:1]
-set output "data/plots/Plot_5000.jpeg" 
+set mytics 5
+set grid xtics ytics mxtics mytics
+set output "data/plots/Plot_400.jpeg" 
 a = 0.002
 b = 0.004
 c = 0.006
 d = 0.008
-plot "data/Body_1_Step_5000.txt" using 2:3 with lines, a,t, b,t, c,t, d,t 
+plot "data/Body_1_Step_400.txt" using 2:4 with lines, a,t, b,t, c,t, d,t 
 

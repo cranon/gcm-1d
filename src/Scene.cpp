@@ -12,7 +12,13 @@ Scene::~Scene() {
 int Scene::doNextStep(float maxTau, int methodType) {
 	fileNumber = fileNumber + 1;
 	if (NumOfBodies == 1) {
-		float temp;
+		Monitor monitor0(body1.mesh.NumX, maxTau);
+		monitor0.getCourant(&body1.mesh);
+		float temp = monitor0.monStruct.max;
+		if(temp > 0.9) {
+			maxTau = maxTau * 0.9 / temp;
+			cout << "maxTau = " << maxTau << endl;
+		}
 		do {
 			body1._mesh = &(body1.mesh);
 			if(body1.doNextStep(maxTau,methodType,"Previous","Previous") == -1) return -1;	

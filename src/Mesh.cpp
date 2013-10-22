@@ -33,7 +33,7 @@ void Mesh::printData(const char * fileName) {
 	for (int i = 0; i < NumX; i++) {
 		dataFile << Values[i].num << "	" << Values[i].x << "	" \
 				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].E << " " << this->Values[i].getA() << endl;
+				Values[i].rho << "	" << Values[i].getE() << endl;
 	}
 	dataFile.close();
 }
@@ -44,12 +44,13 @@ void Mesh::printData(const char * fileName, struct MonStruct *monStruct) {
 	for (i = 0; i < monStruct->Num; i++) {
 		dataFile << Values[i].num << "	" << Values[i].x << "	" \
 				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].E << " " << monStruct->monArr[i] << endl;
+				Values[i].rho << "	" << Values[i].getE() << \
+				" " << monStruct->monArr[i] << endl;
 	}
 	for (i = monStruct->Num; i < NumX; i++) {
 		dataFile << Values[i].num << "	" << Values[i].x << "	" \
 				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].E << endl;
+				Values[i].rho << "	" << Values[i].getE() << endl;
 	}
 	cout << fileName << " max = " << monStruct->max << endl;
 	dataFile.close();

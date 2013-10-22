@@ -75,37 +75,24 @@ float NumMethod::lAppA(int num, int order) {
 				X = proxima->QuadraticAppr(0, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[1].x + tau*X(1) + 1), X(0)*mesh->Values[1].x*mesh->Values[1].x + X(1)*mesh->Values[1].x + X(2), &x1, &x2);
 				if(x1*x2 == 0.0) return x0;
-				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+				if(fabs(x0 - x1) > fabs(x0 - x2)) x1 = x2;
 					if(x1 >= fmin(mesh->Values[1].getA(), mesh->Values[0].getA()) && x1 <= fmax(mesh->Values[1].getA(), mesh->Values[0].getA())) return x1;
 					else return x0;
-				} else {
-					if(x2 >= fmin(mesh->Values[1].getA(), mesh->Values[0].getA()) && x1 <= fmax(mesh->Values[1].getA(), mesh->Values[0].getA())) return x2;
-					else return x0;
-				}
 			} else {
 				b << mesh->Values[num-2].getA() << mesh->Values[num-1].getA() << mesh->Values[num].getA();
 				X = proxima->QuadraticAppr(num-2, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, -(2*tau*X(0)*mesh->Values[num].x + tau*X(1) + 1), X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
-				if(x1*x2 == 0.0) return x0;
-				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+				if(x1*x2 == 0) return x0;
+				if(fabs(x0 - x1) > fabs(x0 - x2)) x1 = x2;
 					h = mesh->Values[num].x - mesh->Values[num-1].x - x1*tau;
 					if(h > 0) {
 						if(x1 >= fmin(mesh->Values[num].getA(), mesh->Values[num-1].getA()) && x1 <= fmax(mesh->Values[num].getA(), mesh->Values[num-1].getA())) return x1;
 						else return x0;
 					} else if(h < 0) {
+						cout << "Courant > 1 lAppA " << num << " tau = " << tau << endl;
 						if(x1 >= fmin(mesh->Values[num-1].getA(), mesh->Values[num-2].getA()) && x1 <= fmax(mesh->Values[num-1].getA(), mesh->Values[num-2].getA())) return x1;
 						else return x0;
 					} else return mesh->Values[num-1].getA();
-				} else {
-					h = mesh->Values[num].x - mesh->Values[num-1].x - x2*tau;
-					if(h > 0) {
-						if(x2 >= fmin(mesh->Values[num].getA(), mesh->Values[num-1].getA()) && x2 <= fmax(mesh->Values[num].getA(), mesh->Values[num-1].getA())) return x2;
-						else return x0;
-					} else if(h < 0) {
-						if(x2 >= fmin(mesh->Values[num-1].getA(), mesh->Values[num-2].getA()) && x2 <= fmax(mesh->Values[num-1].getA(), mesh->Values[num-2].getA())) return x2;
-						else return x0;
-					} else return mesh->Values[num-1].getA();
-				}
 			}
 	}
 }
@@ -130,37 +117,24 @@ float NumMethod::rAppA(int num, int order) {
 				X = proxima->QuadraticAppr(num-1, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
 				if(x1*x2 == 0.0) return x0;
-				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+				if(fabs(x0 - x1) > fabs(x0 - x2)) x1 = x2;
 					if(x1 >= fmin(mesh->Values[num].getA(), mesh->Values[num+1].getA()) && x1 <= fmax(mesh->Values[num].getA(), mesh->Values[num+1].getA())) return x1;
 					else return x0;
-				} else {
-					if(x2 >= fmin(mesh->Values[num].getA(), mesh->Values[num+1].getA()) && x2 <= fmax(mesh->Values[num].getA(), mesh->Values[num+1].getA())) return x2;
-					else return x0;
-				}
 			} else {
 				b << mesh->Values[num].getA() << mesh->Values[num+1].getA() << mesh->Values[num+2].getA();
 				X = proxima->QuadraticAppr(num, &b);
 				gsl_poly_solve_quadratic(X(0)*tau*tau, 2*X(0)*tau*mesh->Values[num].x + X(1)*tau - 1, X(0)*mesh->Values[num].x*mesh->Values[num].x + X(1)*mesh->Values[num].x + X(2), &x1, &x2);
-				if(x1*x2 == 0.0) return x0;
-				if(fabs(x0 - x1) <= fabs(x0 - x2)) {
+				if(x1*x2 == 0) return x0;
+				if(fabs(x0 - x1) > fabs(x0 - x2)) x1 = x2; 
 					h = mesh->Values[num+1].x - mesh->Values[num].x - x1*tau;
 					if(h > 0) {
 						if(x1 >= fmin(mesh->Values[num+1].getA(), mesh->Values[num].getA()) && x1 <= fmax(mesh->Values[num+1].getA(), mesh->Values[num].getA())) return x1;
 						else return x0;
 					} else if(h < 0) {
-						if(x1 >= fmin(mesh->Values[num+2].getA(), mesh->Values[num+1].getA()) && x1 <= fmax(mesh->Values[num+2].getA(), mesh->Values[num+1].getA())) return x1;
+						cout << "Courant > 1 rAppA " << num << " tau = " << tau << endl;						if(x1 >= fmin(mesh->Values[num+2].getA(), mesh->Values[num+1].getA()) && x1 <= fmax(mesh->Values[num+2].getA(), mesh->Values[num+1].getA())) return x1;
 						else return x0;
 					} else return mesh->Values[num+1].getA();
-				} else {
-					h = mesh->Values[num+1].x - mesh->Values[num].x - x2*tau;
-					if(h > 0) {
-						if(x2 >= fmin(mesh->Values[num+1].getA(), mesh->Values[num].getA()) && x2 <= fmax(mesh->Values[num+1].getA(), mesh->Values[num].getA())) return x2;
-						else return x0;
-					} else if(h < 0) {
-						if(x2 >= fmin(mesh->Values[num+2].getA(), mesh->Values[num+1].getA()) && x2 <= fmax(mesh->Values[num-1].getA(), mesh->Values[num-2].getA())) return x2;
-						else return x0;
-					} else return mesh->Values[num+1].getA();
-				}
+
 			}
 	}
 }
@@ -220,15 +194,22 @@ int NumMethod::FirstOrder() {
 			tmp = mesh->Values[i];
 			tmp.x = mesh->Values[i].x + tau*mesh->Values[i].v;
 			
+			
 			b << mesh->Values[i-1].getRiman(1) << mesh->Values[i].getRiman(1);
 			w1 = proxima->LinearAppr(i-1, &b, mesh->Values[i].x - tau*lAppA(i, 1));
+			
 			b << mesh->Values[i].getRiman(2) << mesh->Values[i+1].getRiman(2);
 			w2 = proxima->LinearAppr(i, &b, mesh->Values[i].x + tau*rAppA(i, 1));
 			
 			tmp.v = w1*lAppA(i, 1) + w2*rAppA(i, 1);
 			
 			// To indicate large displacement
-			if(fabs(tmp.x - mesh->Values[i].x) > fmax(fabs(mesh->Values[i].x - mesh->Values[i-1].x), fabs(mesh->Values[i].x - mesh->Values[i+1].x))/3) { cout << "PIZDEC' X i="<< i << endl; return -1; } 
+			if(fabs(tmp.x - mesh->Values[i].x) > \
+					fmax(fabs(mesh->Values[i].x - mesh->Values[i-1].x), \
+					fabs(mesh->Values[i].x - mesh->Values[i+1].x))/3) { 
+				cout << "Large displacement i = "<< i << endl;
+				return -1; 
+			} 
 			tmp.eps = w2 - w1;
 			
 			mesh->Values[i-1] = last;
@@ -252,6 +233,7 @@ int NumMethod::SecondOrder() {
 	b << mesh->Values[0].getRiman(1) << mesh->Values[1].getRiman(1) << mesh->Values[2].getRiman(1);
 	float w1 = proxima->QuadraticAppr(0, &b, mesh->Values[1].x - tau*lAppA(1, 2), true);
 
+	
 	b << mesh->Values[1].getRiman(2) << mesh->Values[2].getRiman(2) << mesh->Values[3].getRiman(2);
 	float w2 = proxima->QuadraticAppr(1, &b, mesh->Values[1].x + tau*rAppA(1, 2), true);
 	
@@ -263,9 +245,11 @@ int NumMethod::SecondOrder() {
 	for(i = 2; i < mesh->NumX - 2 ; i++) {
 		tmp = mesh->Values[i];
 		tmp.x = mesh->Values[i].x + tau*mesh->Values[i].v;
-
+		
+		
 		b << mesh->Values[i-2].getRiman(1) << mesh->Values[i-1].getRiman(1) << mesh->Values[i].getRiman(1);
 		w1 = proxima->QuadraticAppr(i-2, &b, mesh->Values[i].x - tau*lAppA(i, 2), true);
+		
 		
 		b << mesh->Values[i].getRiman(2) << mesh->Values[i+1].getRiman(2) << mesh->Values[i+2].getRiman(2);
 		w2 = proxima->QuadraticAppr(i, &b, mesh->Values[i].x + tau*rAppA(i, 2), true);
@@ -284,8 +268,10 @@ int NumMethod::SecondOrder() {
 	tmp = mesh->Values[i];
 	tmp.x = mesh->Values[i].x + tau*mesh->Values[i].v;
 
+	
 	b << mesh->Values[i-2].getRiman(1) << mesh->Values[i-1].getRiman(1) << mesh->Values[i].getRiman(1);
 	w1 = proxima->QuadraticAppr(i-2, &b, mesh->Values[i].x - tau*lAppA(i, 2), true);
+	
 	
 	b << mesh->Values[i-1].getRiman(2) << mesh->Values[i].getRiman(2) << mesh->Values[i+1].getRiman(2);
 	w2 = proxima->QuadraticAppr(i-1, &b, mesh->Values[i].x + tau*rAppA(i, 2), true);
@@ -301,7 +287,7 @@ int NumMethod::SecondOrder() {
 	mesh->Values[i] = tmp;
 }
 
-int NumMethod::ImplicitSecondOrder(Mesh *mesh) {
+int NumMethod::ImplicitSecondOrder() {
 	int N = mesh->NumX;
 	float a[N], b[N], c[N], d[N], e[N], f[N], P[N], Q[N], M[N], L[N], r1[N], r2[N];
 	for (int k = 1; k < N; k++) {
@@ -316,7 +302,7 @@ int NumMethod::ImplicitSecondOrder(Mesh *mesh) {
 	}
 	for (int k = 0; k < N-1; k++) {
 		float A = 0.5*(mesh->Values[k].getA() + mesh->Values[k+1].getA());
-		float g1 = 0; // fix normal calculating g!
+		vec b;float g1 = 0; // fix normal calculating g!
 		float g2 = 0; // fix normal calculating g!
 		float h = mesh->Values[k+1].x - mesh->Values[k].x;
 		e[k] = 1 - A*tau/h;

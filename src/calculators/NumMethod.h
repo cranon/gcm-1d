@@ -16,7 +16,7 @@ class NumMethod {
 		Node SecondOrder_First();
 		Node FirstOrder_Last();
 		Node SecondOrder_Last();
-		int ImplicitSecondOrder(Mesh *mesh); 
+		int ImplicitSecondOrder(); 
 		int SecondOrder();
 		float lAppA(int num, int order);
 		float rAppA(int num, int order);
