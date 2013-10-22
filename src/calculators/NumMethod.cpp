@@ -270,7 +270,7 @@ int NumMethod::SecondOrder() {
 		b << mesh->Values[i].getRiman(2) << mesh->Values[i+1].getRiman(2) << mesh->Values[i+2].getRiman(2);
 		w2 = proxima->QuadraticAppr(i, &b, mesh->Values[i].x + tau*rAppA(i, 2), true);
 		
-		//if(max(rAppA(i, 2), lAppA(i, 2)) > 5170.0) cout << max(rAppA(i, 2), lAppA(i, 2));
+		//if(max(rAppA(i, 2), lAppA(i, 2)) > 2582.0) cout << "i = " << i << " " << max(rAppA(i, 2), lAppA(i, 2)) << endl;;
 		
 		tmp.v = w1*lAppA(i, 2) + w2*rAppA(i, 2);
 		tmp.eps = w2 - w1;
