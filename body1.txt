@@ -2,7 +2,7 @@ Body1
 plastic
 Left	ZeroV
 Right	ZeroV
-Number_of_nodes	1001
+Number_of_nodes	501
 LeftCorner	0
 RightCorner	0.01
 rho0   7.5e+3
