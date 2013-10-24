@@ -29,7 +29,7 @@ int Scene::doNextStep(float maxTau, int methodType) {
 				maxTau = maxTau * 0.9 / temp;
 				cout << "maxTau = " << maxTau << endl;
 			}
-		} while(temp > 0.9);
+		} while(temp > 0.91);
 		body1.mesh = &(body1._mesh);
 		body1.printData(fileNumber);
 	}

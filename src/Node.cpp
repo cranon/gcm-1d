@@ -23,8 +23,8 @@ float Node::getInv(int i, float A) {
 float Node::getRiman(int i) {
 	// Return Riman's invariant in this node
 	float a = getA();
-	if(i == 1) return (v - a*eps)/2/a;
-	if(i == 2) return (v + a*eps)/2/a;
+	if(i == 1) return (v - a*eps)/a/2;
+	if(i == 2) return (v + a*eps)/a/2;
 }
 
 float Node::getA() {
@@ -56,19 +56,13 @@ float Node::getE() {
 			}
 			//	cout << "The Node is destroyed\n";
 			return E0*d;
-					
-			/*
-			if(fabs(eps) >= 0.0001 && fabs(eps) < 0.000125) {
-				return E/3;
-			}
-			if(fabs(eps) >= 0.000125 && fabs(eps) < 0.000150) {
-				return E/10;
-			}
-			if(fabs(eps) >= 0.00015) {
-				return E/30;
-			}
+/*
+			if(_eps >= 0.0001 && _eps < 0.000125) return E/3;
+			if(_eps >= 0.000125 && _eps < 0.000150) return E/10;
+			if(_eps >= 0.00015) return E/30;
 			else return E;
-			break;*/
+			break;
+	*/
 	}
 }
 
