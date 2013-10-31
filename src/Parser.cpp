@@ -9,22 +9,40 @@ Parser::~Parser() {
 int Parser::Reading(const char * fileName) {
 		ifstream cfg(fileName, ios::in);
         string scfg;
-		int i;
+		
         cfg >> scfg;
         cfg >> scfg; 
 		rheology = scfg;
 		cfg >> scfg;
 		cfg >> scfg;
-		Left = scfg;
+		cfg >> scfg;
+		Left.t1 = atof(scfg.c_str());
+		cfg >> Left.type1;
+		cfg >> scfg;
+		if (scfg.c_str()[0] == 'V') Left.isEps1 = false;
+		if (scfg.c_str()[0] == 'E') Left.isEps1 = true;
+		cfg >> scfg;
+		Left.val1 = atof(scfg.c_str());
+		cfg >> scfg;
+		
 		cfg >> scfg;
 		cfg >> scfg;
-		Right = scfg;
+		cfg >> scfg;
+		Right.t1 = atof(scfg.c_str());
+		cfg >> Right.type1;
+		cfg >> scfg;
+		if (scfg.c_str()[0] == 'V') Right.isEps1 = false;
+		if (scfg.c_str()[0] == 'E') Right.isEps1 = true;
+		cfg >> scfg;
+		Right.val1 = atof(scfg.c_str());
+		cfg >> scfg;
+
 		cfg >> scfg;
 		cfg >> scfg;
         NumX = atoi(scfg.c_str());
 		InitValues = new Node [NumX];
         
-        for(i = 0; i < 6; i++){
+        for(int i = 0; i < 6; i++){
                 cfg >> scfg;
                 cfg >> scfg;
                 body[i] = atof(scfg.c_str());
@@ -50,7 +68,7 @@ int Parser::Reading(const char * fileName) {
 			float a = atof(scfg.c_str());
 			cfg >> scfg;
 			float sigma = atof(scfg.c_str());
-			for(i = 0; i < 6; i++){
+			for(int i = 0; i < 6; i++){
 				cfg >> scfg;
 				cfg >> scfg;
 				wave1[i] = atof(scfg.c_str());
@@ -61,7 +79,7 @@ int Parser::Reading(const char * fileName) {
 				cfg >> scfg;
 				cfg >> scfg;
 				cfg >> scfg;
-			for(i = 0; i < 6; i++){
+			for(int i = 0; i < 6; i++){
 				cfg >> scfg;
 				cfg >> scfg;
 			    wave1[i] = atof(scfg.c_str());
@@ -86,7 +104,7 @@ int Parser::Reading(const char * fileName) {
 			float a = atof(scfg.c_str());
 			cfg >> scfg;
 			float sigma = atof(scfg.c_str());
-			for(i = 0; i < 6; i++){
+			for(int i = 0; i < 6; i++){
 				cfg >> scfg;
 				cfg >> scfg;
 				wave2[i] = atof(scfg.c_str());
@@ -97,7 +115,7 @@ int Parser::Reading(const char * fileName) {
 				cfg >> scfg;
 				cfg >> scfg;
 				cfg >> scfg;
-			for(i = 0; i < 6; i++){
+			for(int i = 0; i < 6; i++){
 				cfg >> scfg;
 				cfg >> scfg;
 			    wave2[i] = atof(scfg.c_str());
@@ -115,26 +133,26 @@ int Parser::Reading(const char * fileName) {
         cfg.close();
 		
 		// Layer structure
-/*
-		float rho0 = body[2];
-		int NumOfLayers = 5;
-		int NumOfPeriods = 1;
-		int a = NumX/NumOfPeriods;
-		int b = a/NumOfLayers;
-		int m;
-		for (int n = 0; n < NumOfPeriods; n++) {
-			for (m = 0; m < NumOfLayers; m++) {
-				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
-					InitValues[i].rho =	rho0*(m+1);
-				} 
-			}
-			while(i < NumX) {
-				InitValues[i].rho =	rho0*(m);
-				i++;
-			}
-		}
-*/
-		// Layer structure
+//		
+//		float rho0 = body[2];
+//		int NumOfLayers = 5;
+//		int NumOfPeriods = 1;
+//		int a = NumX/NumOfPeriods;
+//		int b = a/NumOfLayers;
+//		int m;
+//		for (int n = 0; n < NumOfPeriods; n++) {
+//			for (m = 0; m < NumOfLayers; m++) {
+//				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
+//					InitValues[i].rho =	rho0*(m+1);
+//				} 
+//			}
+//			while(i < NumX) {
+//				InitValues[i].rho =	rho0*(m);
+//				i++;
+//			}
+//		}
+
+//		// Layer structure
 
 }
     
@@ -158,9 +176,7 @@ int Parser::getNumX() {
 string Parser::getRheology() {
 	return rheology;
 }
-string Parser::getLeft() {
-	return Left;
-}
-string Parser::getRight() {
+struct CnrCondition Parser::getCnrCondition(bool isLeft) {
+	if (isLeft) return Left;
 	return Right;
 }

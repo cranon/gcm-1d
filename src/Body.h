@@ -1,4 +1,5 @@
 #include "Parser.h"
+#include "Node.h"
 #include "calculators/NumMethod.h"
 #include "calculators/Monitor.h"
 #ifndef BODY_H
@@ -7,6 +8,9 @@
 using namespace std;
 
 class Body {
+	float t;
+	CnrCondition Left;
+	CnrCondition Right;
 	Mesh mesh;
 	Mesh _mesh;
 	string rheology;

@@ -6,12 +6,14 @@ Body::Body() {
 
 void Body::setParameters(const char * fileName) {
 	cout << "Setting parameters of body" << endl;
+	t = 0;
 	Parser parser;
 	parser.Reading(fileName);
 	rheology = parser.getRheology();
 	mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
 	_mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
-	// Fix normal chosing of Corner Conditions parameters!
+	Left = parser.getCnrCondition(true);
+	Right = parser.getCnrCondition(false);
 }
 
 int Body::doNextStep(float tau, int methodType, \
@@ -20,9 +22,25 @@ int Body::doNextStep(float tau, int methodType, \
 	 * Choosing number of method and setting extForce depends on type of method, 
 	 * rheology and corner conditions will be here
 	 */
-
 	NumMethod method(&_mesh, tau);
-	if(method.SecondOrder() == -1) return -1;
+	
+	float val = Left.val1;
+	bool isEps = Left.isEps1;
+	if (t > Left.t1) {
+		val = 0.0;
+		isEps = true;
+	}
+	Node first = method.SecondOrder_First(isEps, val);
+	
+	val = Right.val1;
+	isEps = Right.isEps1;
+	if (t > Right.t1) {
+		val = 0.0;
+		isEps = true;
+	}
+	Node last = method.SecondOrder_Last(isEps, val);
+	if(method.SecondOrder(first, last) == -1) return -1;
+	t = t + tau;
 }
 
 void Body::printData(int fileNumber) {

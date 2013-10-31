@@ -15,16 +15,15 @@ Node::Node(int _num, float _x, float _v, float _eps, float _rho, float _E) {
 Node::~Node() {
 }
 
-float Node::getInv(int i, float A) {
-	if (i == 1) return (A*v - eps);
-	if (i == 2) return (A*v + eps);
+float Node::getRiman(int i) {
+	float a = getA();
+	if(i == 1) return -v + a*eps;
+	if(i == 2) return v + a*eps;
 }
 
-float Node::getRiman(int i) {
-	// Return Riman's invariant in this node
-	float a = getA();
-	if(i == 1) return (v - a*eps)/a/2;
-	if(i == 2) return (v + a*eps)/a/2;
+float Node::getRiman(int i, float a) {
+	if(i == 1) return -v + a*eps;
+	if(i == 2) return v + a*eps;
 }
 
 float Node::getA() {
@@ -37,7 +36,7 @@ float Node::getE() {
 			return E;
 			break;
 		case 'p': // plastic model
-			float ElcLim = 0.002;
+			/*float ElcLim = 0.002;
 			float FldBgn = 0.003;
 			float FldEnd = 0.006;
 			float BrcPnt = 0.01;
@@ -55,14 +54,14 @@ float Node::getE() {
 				return E1 * exp(1 / (1 - b * b / (_eps - a) / (_eps - a))) + E0*d;
 			}
 			//	cout << "The Node is destroyed\n";
-			return E0*d;
-/*
+			return E0*d;*/
+			float _eps = fabs(eps);
 			if(_eps >= 0.0001 && _eps < 0.000125) return E/3;
 			if(_eps >= 0.000125 && _eps < 0.000150) return E/10;
 			if(_eps >= 0.00015) return E/30;
 			else return E;
 			break;
-	*/
+
 	}
 }
 

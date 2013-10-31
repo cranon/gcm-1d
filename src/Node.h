@@ -15,7 +15,7 @@ public:
     Node();
     Node(int _num, float _x, float _v, float _eps, float _rho, float _E);
     float getRiman(int i);
-	float getInv(int i, float A);
+    float getRiman(int i, float a);
 	float getA();
 	float getE();
 	~Node();

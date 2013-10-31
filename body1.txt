@@ -1,10 +1,19 @@
 Body1
 plastic
-Left	ZeroV
-Right	ZeroV
-Number_of_nodes	1001
+
+Left_Corner{	
+	t	1e-6
+	fix	V	50
+}
+ 
+Right_Corner{
+	t	1e+6
+	fix Eps	0
+}
+
+Number_of_nodes	401
 LeftCorner	0
-RightCorner	0.01
+RightCorner	0.05
 rho0   7.5e+3
 E0  2e+11
 V0  0
@@ -12,18 +21,18 @@ EPS0  0
 
 wave1
 #gauss 1 0.004 0.00005 
-x1	0.0045
-x2	0.0055
+x1	0.0005
+x2	-0.0015
 rho0 7.5e+3
 E0 2e+11
-V_0	20
-EPS_0 1e-6
+V_0	1.32
+EPS_0 2e-4
 
 wave2
 #gauss 1 0.7 0.05 
-x1	0.00
-x2	-0.005
+x1	0.0485
+x2	-0.0495
 rho0 3e+3
 E0	2e+11
-V_0	0
-EPS_0	0
+V_0	-1.32
+EPS_0	2e-4

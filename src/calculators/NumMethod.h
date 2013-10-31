@@ -14,10 +14,12 @@ class NumMethod {
 		int FirstOrder();
 		Node FirstOrder_First();
 		Node SecondOrder_First();
+		Node SecondOrder_First(bool epsIsFix, float fixVal);
 		Node FirstOrder_Last();
 		Node SecondOrder_Last();
+		Node SecondOrder_Last(bool epsIsFix, float fixVal);
 		int ImplicitSecondOrder(); 
-		int SecondOrder();
+		int SecondOrder(Node first, Node last);
 		float lAppA(int num, int order);
 		float rAppA(int num, int order);
 };

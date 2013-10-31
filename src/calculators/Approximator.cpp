@@ -48,7 +48,23 @@ float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 		
 	// Limitor
 	if(!limitor) return X(0)*x0*x0 + X(1)*x0 + X(2);
-	else {
+/*	else {
+		float X0 = -X(1)/2/X(0);
+		float res = X(0)*x0*x0 + X(1)*x0 + X(2);
+		if(X0 >= x3 || X0 <= x1) return res;
+		else if(x0 <= 0 && X0 < 0) {
+			if (res < fmin((*b)(0), (*b)(1))) return fmin((*b)(0), (*b)(1));
+			if (res > fmax((*b)(0), (*b)(1))) return fmax((*b)(0), (*b)(1));
+			return res;
+		} else if(x0 >= 0 && X0 > 0) {
+			if (res < fmin((*b)(2), (*b)(1))) return fmin((*b)(2), (*b)(1));
+			if (res > fmax((*b)(2), (*b)(1))) return fmax((*b)(2), (*b)(1));
+			return res;
+		} else {
+			return res;
+		}
+	}*/
+		else {
 		float X0 = -X(1)/2/X(0);
 		if(X0 >= x3 || X0 <= x1) return X(0)*x0*x0 + X(1)*x0 + X(2);
 		else if(x0 <= 0 && X0 < 0) {
@@ -63,6 +79,7 @@ float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 			return X(0)*x0*x0 + X(1)*x0 + X(2);
 		}
 	}
+
 }
 
 vec Approximator::QuadraticAppr(int i, vec* b) {

@@ -1,5 +1,5 @@
 #include "Body.h"
-#include <stdlib.h>
+#include <cstdlib>
 #include <sstream>
 #ifndef SCENE_H
 #define	SCENE_H
