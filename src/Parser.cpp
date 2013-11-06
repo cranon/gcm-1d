@@ -139,7 +139,7 @@ int Parser::Reading(const char * fileName) {
 //		int NumOfPeriods = 1;
 //		int a = NumX/NumOfPeriods;
 //		int b = a/NumOfLayers;
-//		int m;
+//		int m,i;
 //		for (int n = 0; n < NumOfPeriods; n++) {
 //			for (m = 0; m < NumOfLayers; m++) {
 //				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {

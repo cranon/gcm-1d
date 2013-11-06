@@ -11,15 +11,14 @@ class NumMethod {
 		NumMethod();
 		NumMethod(Mesh* _mesh, float _tau);
 		~NumMethod();
-		int FirstOrder();
-		Node FirstOrder_First();
-		Node SecondOrder_First();
-		Node SecondOrder_First(bool epsIsFix, float fixVal);
-		Node FirstOrder_Last();
-		Node SecondOrder_Last();
-		Node SecondOrder_Last(bool epsIsFix, float fixVal);
-		int ImplicitSecondOrder(); 
+		int FirstOrder(Node first, Node last);
 		int SecondOrder(Node first, Node last);
+		Node FirstOrder_First(bool epsIsFix, float fixVal);
+		Node SecondOrder_First(bool epsIsFix, float fixVal);
+		Node FirstOrder_Last(bool epsIsFix, float fixVal);
+		Node SecondOrder_Last(bool epsIsFix, float fixVal);
+		int ImplicitSecondOrder(bool leftEpsIsFix, float leftFixVal, \
+		bool rightEpsIsFix, float rightFixVal);
 		float lAppA(int num, int order);
 		float rAppA(int num, int order);
 };

@@ -1,19 +1,19 @@
 Body1
-plastic
+elastic
 
 Left_Corner{	
 	t	1e-6
-	fix	V	50
+	fix	V	1000
 }
  
 Right_Corner{
 	t	1e+6
-	fix Eps	0
+	fix V	0
 }
 
-Number_of_nodes	401
+Number_of_nodes	1001
 LeftCorner	0
-RightCorner	0.05
+RightCorner	0.1
 rho0   7.5e+3
 E0  2e+11
 V0  0
@@ -32,7 +32,7 @@ wave2
 #gauss 1 0.7 0.05 
 x1	0.0485
 x2	-0.0495
-rho0 3e+3
+rho0 7.5e+3
 E0	2e+11
 V_0	-1.32
 EPS_0	2e-4

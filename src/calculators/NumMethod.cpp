@@ -101,29 +101,23 @@ float NumMethod::rAppA(int num, int order) {
 	}
 }
 
-// First order for a first node
-Node NumMethod::FirstOrder_First() { 
+// First order for a first node (any corner condition)
+Node NumMethod::FirstOrder_First(bool epsIsFix, float fixVal) { 
 	Node tmp = mesh->Values[0];
-	tmp.x = mesh->Values[0].x + tau * mesh->Values[0].v;
-	tmp.v = 0;
+	tmp.x = tmp.x + tau * tmp.v;
 	vec b;
 	float aR = rAppA(0, 1);
 	b << mesh->Values[0].getRiman(2,aR) << mesh->Values[1].getRiman(2,aR);
-	tmp.eps = proxima->LinearAppr(0, &b, mesh->Values[0].x + tau*aR)/aR;
+	if (epsIsFix) {
+		tmp.eps = fixVal;
+		tmp.v = proxima->LinearAppr(0, &b, mesh->Values[0].x + tau*aR) - aR*fixVal;
+	} else {
+		tmp.v = fixVal;
+		tmp.eps = (proxima->LinearAppr(0, &b, mesh->Values[0].x + tau*aR) - fixVal)/aR;	
+	}
 	return tmp;
 }
 
-// Second order for a first node (zeroV)
-Node NumMethod::SecondOrder_First() { 
-	Node tmp = mesh->Values[0];
-	tmp.x = mesh->Values[0].x + tau * mesh->Values[0].v;
-	tmp.v = 0;
-	vec b;
-	float aR = rAppA(0, 2);
-	b << mesh->Values[0].getRiman(2,aR) << mesh->Values[1].getRiman(2,aR) << mesh->Values[2].getRiman(2,aR);
-	tmp.eps = proxima->QuadraticAppr(0, &b, mesh->Values[0].x + tau*aR, true)/aR;	
-	return tmp;
-}
 // Second order for a first node (any corner condition)
 Node NumMethod::SecondOrder_First(bool epsIsFix, float fixVal) { 
 	Node tmp = mesh->Values[0];
@@ -141,27 +135,20 @@ Node NumMethod::SecondOrder_First(bool epsIsFix, float fixVal) {
 	return tmp;
 }
 
-// First order for a last node
-Node NumMethod::FirstOrder_Last() {
+// First order for a last node (any corner condition)
+Node NumMethod::FirstOrder_Last(bool epsIsFix, float fixVal) {
 	Node tmp = mesh->Values[mesh->NumX - 1];
-	tmp.x = mesh->Values[mesh->NumX - 1].x + tau * mesh->Values[mesh->NumX - 1].v;
-	tmp.v = 0;
+	tmp.x = tmp.x + tau * tmp.v;
 	vec b;
 	float aL = lAppA(mesh->NumX-1,1);
 	b << mesh->Values[mesh->NumX-2].getRiman(1,aL) << mesh->Values[mesh->NumX-1].getRiman(1,aL);
-	tmp.eps = proxima->LinearAppr(mesh->NumX-2, &b, mesh->Values[mesh->NumX-1].x - tau*aL)/aL;
-	return tmp;
-}
-
-// Second order for a last node (zeroV)
-Node NumMethod::SecondOrder_Last() {
-	Node tmp = mesh->Values[mesh->NumX - 1];
-	tmp.x = mesh->Values[mesh->NumX - 1].x + tau * mesh->Values[mesh->NumX - 1].v;
-	tmp.v = 0;
-	vec b;
-	float aL = lAppA(mesh->NumX-1, 2);
-	b << mesh->Values[mesh->NumX-3].getRiman(1,aL) << mesh->Values[mesh->NumX-2].getRiman(1,aL) << mesh->Values[mesh->NumX-1].getRiman(1,aL);
-	tmp.eps = proxima->QuadraticAppr(mesh->NumX-3, &b, mesh->Values[mesh->NumX-1].x - tau*aL, true)/aL;
+	if (epsIsFix) {
+		tmp.eps = fixVal;
+		tmp.v = aL* fixVal - proxima->LinearAppr(mesh->NumX-2, &b, mesh->Values[mesh->NumX-1].x - tau*aL);
+	} else {
+		tmp.v = fixVal;
+		tmp.eps = (proxima->LinearAppr(mesh->NumX-2, &b, mesh->Values[mesh->NumX-1].x - tau*aL) + fixVal)/aL;
+	}
 	return tmp;
 }
 
@@ -183,8 +170,8 @@ Node NumMethod::SecondOrder_Last(bool epsIsFix, float fixVal) {
 }
 
 // First order
-int NumMethod::FirstOrder() {
-	Node last = FirstOrder_First();
+int NumMethod::FirstOrder(Node first_node, Node last_node) {
+	Node last = first_node;
 	Node tmp;
 	float w1, w2;
 	vec b;
@@ -202,19 +189,12 @@ int NumMethod::FirstOrder() {
 			w2 = proxima->LinearAppr(i, &b, mesh->Values[i].x + tau*aR);
 			
 			tmp.v = (-w1*aR + w2*aL)/(aL + aR);
-			tmp.eps = (w2 + w1)/(aL + aR);			
-			// To indicate large displacement
-			if(fabs(tmp.x - mesh->Values[i].x) > \
-					fmax(fabs(mesh->Values[i].x - mesh->Values[i-1].x), \
-					fabs(mesh->Values[i].x - mesh->Values[i+1].x))/3) { 
-				cout << "Large displacement i = "<< i << endl;
-				return -1; 
-			} 
+			tmp.eps = (w2 + w1)/(aL + aR);
 			
 			mesh->Values[i-1] = last;
 			last = tmp;
 		}
-	mesh->Values[mesh->NumX - 1] = FirstOrder_Last();
+	mesh->Values[mesh->NumX - 1] = last_node;
 	mesh->Values[mesh->NumX - 2] = last;
 }
 
@@ -256,8 +236,6 @@ int NumMethod::SecondOrder(Node first_node, Node last_node) {
 		b << mesh->Values[i].getRiman(2,aR) << mesh->Values[i+1].getRiman(2,aR) << mesh->Values[i+2].getRiman(2,aR);
 		w2 = proxima->QuadraticAppr(i, &b, mesh->Values[i].x + tau*aR, false);
 		
-		//if(max(rAppA(i, 2), lAppA(i, 2)) > 2582.0) cout << "i = " << i << " " << max(rAppA(i, 2), lAppA(i, 2)) << endl;;
-		
 		tmp.v = (-w1*aR + w2*aL)/(aL + aR);
 		tmp.eps = (w2 + w1)/(aL + aR);
 		
@@ -291,9 +269,11 @@ int NumMethod::SecondOrder(Node first_node, Node last_node) {
 	mesh->Values[i] = tmp;
 }
 
-int NumMethod::ImplicitSecondOrder() {
+int NumMethod::ImplicitSecondOrder(bool leftEpsIsFix, float leftFixVal, \
+		bool rightEpsIsFix, float rightFixVal) {
 	int N = mesh->NumX;
 	float a[N], b[N], c[N], d[N], e[N], f[N], P[N], Q[N], M[N], L[N], r1[N], r2[N];
+	float ksi, eta, dzeta, kapa;
 	for (int k = 1; k < N; k++) {
 		float A = 0.5*(mesh->Values[k].getA() + mesh->Values[k-1].getA());
 		float g1 = 0; // fix normal calculating g!
@@ -301,7 +281,7 @@ int NumMethod::ImplicitSecondOrder() {
 		float h = mesh->Values[k].x - mesh->Values[k-1].x;
 		a[k] = 1 - A*tau/h;
 		b[k] = 1 + A*tau/h;
-		c[k] = 2*A*tau*g1 - 2*tau*g2 + a[k]*mesh->Values[k].getRiman(1,A) + \
+		c[k] = -2*tau*g1 + 2*A*tau*g2 + a[k]*mesh->Values[k].getRiman(1,A) + \
 				b[k]*mesh->Values[k-1].getRiman(1,A);
 	}
 	for (int k = 0; k < N-1; k++) {
@@ -312,14 +292,9 @@ int NumMethod::ImplicitSecondOrder() {
 		float h = mesh->Values[k+1].x - mesh->Values[k].x;
 		e[k] = 1 - A*tau/h;
 		d[k] = 1 + A*tau/h;
-		f[k] = 2*A*tau*g1 + 2*tau*g2 + e[k]*mesh->Values[k].getRiman(2,A) + \
+		f[k] = 2*tau*g1 + 2*A*tau*g2 + e[k]*mesh->Values[k].getRiman(2,A) + \
 				d[k]*mesh->Values[k+1].getRiman(2,A);
 	}
-	
-	double eta = 0;	// fix normal choosing eta, ...
-	double dzeta = 0;
-	double ksi = 1;
-	double kapa = 1;
 	
 	P[1] = -a[1]/b[1];
 	Q[1] = c[1]/b[1];
@@ -334,6 +309,26 @@ int NumMethod::ImplicitSecondOrder() {
 		L[i+1] = M[i]*f[i]/d[i] + L[i];
 	}
 	
+	
+	float a_l = mesh->Values[0].getA();
+	float a_r = (mesh->Values[0].getA() + mesh->Values[1].getA())/2;
+	if(leftEpsIsFix) {
+		ksi = 1;
+		eta = leftFixVal*(a_l+a_r);
+	} else {
+		ksi = -a_r/a_l;
+		eta = leftFixVal*(a_l+a_r)/a_l;
+	}
+	a_r = mesh->Values[N-1].getA();
+	a_l = (mesh->Values[N-1].getA() + mesh->Values[N-2].getA())/2;
+	if(rightEpsIsFix) {
+		kapa = 1;
+		dzeta = rightFixVal*(a_l+a_r);
+	} else {
+		kapa = -a_r/a_l;
+		dzeta = rightFixVal*(a_l+a_r)/a_l;
+	}
+	
 	mat S = zeros<mat>(4,4);
 	vec R, X;
 	S << P[N-1] << 0 << -1 << 0 << endr <<
@@ -342,7 +337,7 @@ int NumMethod::ImplicitSecondOrder() {
 		0 <<   0	<< kapa << 1;
 	R << -Q[N-1] << L[N-1] << eta << dzeta;
 	X = solve(S,R);
-	//cout << X;
+
 	r1[0] = X(0);
 	r2[0] = X(1);
 	r1[N-1] = X(2);
@@ -354,9 +349,23 @@ int NumMethod::ImplicitSecondOrder() {
 	for (int i = N-2; i >=0; i--) {
 		r2[i] = (-r2[i+1]*e[i] + f[i])/d[i];
 	}
+
+	float alpha = 0.05;
+	float tmp1, tmp2 = r1[0];
+	for (int i = 1; i < N-1; i++) {
+		tmp1 = r1[i];
+		r1[i] = r1[i]*(1 - 2*alpha) + alpha*tmp2 + alpha*r1[i+1];
+		tmp2 = tmp1;
+	}
+	tmp2 = r2[0];
+	for (int i = 1; i < N-1; i++) {
+		tmp1 = r2[i];
+		r2[i] = r2[i]*(1 - 2*alpha) + alpha*tmp2 + alpha*r2[i+1];
+		tmp2 = tmp1;
+	}
 	
-	float a_l = mesh->Values[0].getA();
-	float a_r = (mesh->Values[0].getA() + mesh->Values[1].getA())/2;
+	a_l = mesh->Values[0].getA();
+	a_r = (mesh->Values[0].getA() + mesh->Values[1].getA())/2;
 	mesh->Values[0].v = (a_l*r2[0] - a_r*r1[0])/(a_l + a_r);
 	mesh->Values[0].eps = (r1[0] + r2[0])/(a_l + a_r);
 	// fix x[0]!

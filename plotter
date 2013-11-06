@@ -1,9 +1,9 @@
 reset
 set term jpeg
-#set xrange [0:0.05] 
-set yrange [-0.00064912248459:0.00064912248459] 
+#set xrange [0:0.1] 
+#set yrange [-1000.0:1000.0] 
 set mytics 5
 set mxtics 5
 set grid xtics ytics mxtics mytics
-set output "data/plots/Plot_1000.jpeg" 
-plot "data/Body_1_Step_1000.txt" using 2:4 with lines 
+set output "data/plots/Plot_2500.jpeg" 
+plot "data/Body_1_Step_2500.txt" using 2:4 with lines 
