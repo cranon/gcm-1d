@@ -23,6 +23,7 @@ public:
 	void printData(const char *fileName, struct MonStruct *monStruct);
 	void operator= (Mesh *mesh2);
 	Node getNode(int i);
+	
 	friend class NumMethod;
 	friend class Approximator;
 	friend class Monitor;

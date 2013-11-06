@@ -1,13 +1,13 @@
 Body1
 elastic
 
-Left_Corner{	
-	t	1e-6
-	fix	V	1000
+Left_Corner {	
+	t	1e-4
+	fix	V	0
 }
  
-Right_Corner{
-	t	1e+6
+Right_Corner {
+	t	1e-4
 	fix V	0
 }
 
@@ -21,12 +21,12 @@ EPS0  0
 
 wave1
 #gauss 1 0.004 0.00005 
-x1	0.0005
-x2	-0.0015
+x1	0.05
+x2	0.06
 rho0 7.5e+3
 E0 2e+11
-V_0	1.32
-EPS_0 2e-4
+V_0	10
+EPS_0 0
 
 wave2
 #gauss 1 0.7 0.05 

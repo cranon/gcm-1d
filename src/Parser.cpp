@@ -115,19 +115,21 @@ int Parser::Reading(const char * fileName) {
 				cfg >> scfg;
 				cfg >> scfg;
 				cfg >> scfg;
-			for(int i = 0; i < 6; i++){
-				cfg >> scfg;
-				cfg >> scfg;
-			    wave2[i] = atof(scfg.c_str());
-			}
-			if (wave2[1] >= wave2[0]) {
-			for (int i = 0; i < NumX; i++) {
-			if ((InitValues[i].x >= wave2[0]) && (InitValues[i].x <= wave2[1])) {
-				InitValues[i].v = wave2[4];
-				InitValues[i].eps = wave2[5];
-				InitValues[i].E = wave2[3];
-				InitValues[i].rho = wave2[2];
-			}}}
+				for(int i = 0; i < 6; i++) {
+					cfg >> scfg;
+					cfg >> scfg;
+					wave2[i] = atof(scfg.c_str());
+				}
+				if (wave2[1] >= wave2[0]) {
+					for (int i = 0; i < NumX; i++) {
+						if ((InitValues[i].x >= wave2[0]) && (InitValues[i].x <= wave2[1])) {
+							InitValues[i].v = wave2[4];
+							InitValues[i].eps = wave2[5];
+							InitValues[i].E = wave2[3];
+							InitValues[i].rho = wave2[2];
+						}
+					}
+				}
 		}
 		
         cfg.close();
