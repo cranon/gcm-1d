@@ -53,7 +53,6 @@ int Scene::doNextStep(float maxTau, int methodType) {
 			}
 		} while(temp > 0.91);
 		body1.mesh = &(body1._mesh);
-		if(fileNumber == 500) cout << body1.t << endl;
 		body1.printData(fileNumber);
 	}
 }
