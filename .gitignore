@@ -16,5 +16,7 @@ data/*
 Энтыр-прайз/*
 nbproject/*
 *.avi
+*.jpeg
+*.png
 run
 *~

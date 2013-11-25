@@ -30,27 +30,30 @@ void Mesh::setParameters(Node *InitValues, int _NumX, string _rheology) {
 
 void Mesh::printData(const char * fileName) {
 	ofstream dataFile (fileName, ios::out);
+	dataFile.precision(15);
 	for (int i = 0; i < NumX; i++) {
-		dataFile << Values[i].num << "	" << Values[i].x << "	" \
-				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].getE() << " " << Values[i].getA() << " " << Values[i].getRiman(1) << endl;
+		dataFile << scientific << Values[i].num << "\t" << Values[i].x << "\t" \
+				<< Values[i].v << "\t" << Values[i].eps << "\t" << \
+				Values[i].rho << "\t" << Values[i].getE() << "\t" << Values[i].getA() \
+				<< "\t" << Values[i].getRiman(1) << endl;
 	}
 	dataFile.close();
 }
 
 void Mesh::printData(const char * fileName, struct MonStruct *monStruct) {
 	ofstream dataFile (fileName, ios::out);
+	dataFile.precision(15);
 	int i;
 	for (i = 0; i < monStruct->Num; i++) {
-		dataFile << Values[i].num << "	" << Values[i].x << "	" \
-				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].getE() << \
-				" " << monStruct->monArr[i] << endl;
+		dataFile << scientific << Values[i].num << "\t" << Values[i].x << "\t" \
+				<< Values[i].v << "\t" << Values[i].eps << "\t" << \
+				Values[i].rho << "\t" << Values[i].getE() << \
+				"\t" << monStruct->monArr[i] << endl;
 	}
 	for (i = monStruct->Num; i < NumX; i++) {
-		dataFile << Values[i].num << "	" << Values[i].x << "	" \
-				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].getE() << endl;
+		dataFile << Values[i].num << "\t" << Values[i].x << "\t" \
+				<< Values[i].v << "\t" << Values[i].eps << "\t" << \
+				Values[i].rho << "\t" << Values[i].getE() << endl;
 	}
 	cout << fileName << " max = " << monStruct->max << endl;
 	dataFile.close();

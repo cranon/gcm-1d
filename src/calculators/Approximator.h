@@ -8,9 +8,9 @@ class Approximator {
 public:
 	Approximator(Mesh* _mesh);
 	~Approximator();
-	float LinearAppr(int i, vec* b, float x0);
+	double LinearAppr(int i, vec* b, double x0);
 	vec LinearAppr(int i, vec* b);
-	float QuadraticAppr(int i, vec* b, float x0, bool limitor);
+	double QuadraticAppr(int i, vec* b, double x0, bool limitor);
 	vec QuadraticAppr(int i, vec* b);
 };
 

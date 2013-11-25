@@ -8,7 +8,7 @@ Approximator::~Approximator() {
 	
 }
 
-float Approximator::LinearAppr(int i, vec* b, float x0) {
+double Approximator::LinearAppr(int i, vec* b, double x0) {
 	if(x0 > mesh->Values[i+1].x || x0 < mesh->Values[i].x) {
 		cerr << "LinearAppr: wrong 'x0' in " << i << " node" << endl;
 		exit(-1); // STOP
@@ -28,15 +28,15 @@ vec Approximator::LinearAppr(int i, vec* b) {
 	return solve(A, *b);
 }
 
-float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
+double Approximator::QuadraticAppr(int i, vec* b, double x0, bool limitor) {
 	if(x0 > mesh->Values[i+2].x || x0 < mesh->Values[i].x) {
 		cerr << "QuadraticAppr: wrong 'x0' in " << i << " node" << endl;
 		exit(-1); // STOP
 	}
 	
-	float x1 = -1;
-	float x2 = 0;
-	float x3 = (mesh->Values[i+2].x - mesh->Values[i+1].x) / (mesh->Values[i+1].x - mesh->Values[i].x);
+	double x1 = -1;
+	double x2 = 0;
+	double x3 = (mesh->Values[i+2].x - mesh->Values[i+1].x) / (mesh->Values[i+1].x - mesh->Values[i].x);
 	x0 = (x0 - mesh->Values[i+1].x) / (mesh->Values[i+1].x - mesh->Values[i].x);
 	
 	mat A;
@@ -47,10 +47,11 @@ float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 	vec X = solve(A, *b);
 		
 	// Limitor
-	if(!limitor) return X(0)*x0*x0 + X(1)*x0 + X(2); /*
+	if(!limitor) 
+		return X(0)*x0*x0 + X(1)*x0 + X(2);
 	else {
-		float X0 = -X(1)/2/X(0);
-		float res = X(0)*x0*x0 + X(1)*x0 + X(2);
+		double X0 = -X(1)/2/X(0);
+		double res = X(0)*x0*x0 + X(1)*x0 + X(2);
 		if(X0 >= x3 || X0 <= x1) return res;
 		else if(x0 <= 0 && X0 < 0) {
 			if (res < fmin((*b)(0), (*b)(1))) return fmin((*b)(0), (*b)(1));
@@ -63,9 +64,9 @@ float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 		} else {
 			return res;
 		}
-	}*/
-		else {
-		float X0 = -X(1)/2/X(0);
+	}
+		/*else {
+		double X0 = -X(1)/2/X(0);
 		if(X0 >= x3 || X0 <= x1) return X(0)*x0*x0 + X(1)*x0 + X(2);
 		else if(x0 <= 0 && X0 < 0) {
 			vec c = b->rows(0, 1);
@@ -78,14 +79,14 @@ float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 		} else {
 			return X(0)*x0*x0 + X(1)*x0 + X(2);
 		}
-	}
+	}*/
 
 }
 
 vec Approximator::QuadraticAppr(int i, vec* b) {
-	float x1 = -1;
-	float x2 = 0;
-	float x3 = (mesh->Values[i+2].x - mesh->Values[i+1].x) / (mesh->Values[i+1].x - mesh->Values[i].x);
+	double x1 = -1;
+	double x2 = 0;
+	double x3 = (mesh->Values[i+2].x - mesh->Values[i+1].x) / (mesh->Values[i+1].x - mesh->Values[i].x);
 	
 	mat A;
 	A << x1*x1 << x1 << 1.0 << endr

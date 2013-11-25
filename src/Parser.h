@@ -13,18 +13,18 @@ using namespace std;
 
 // Parsing body1.txt and return initial values in the body
 struct CnrCondition {
-	float t1, t2;
+	double t1, t2;
 	string type1, type2;
 	bool isEps1, isEps2;
-	float val1, val2;
+	double val1, val2;
 };
 
 class Parser {
         int NumX;
 		string rheology;
-        float body[6];
-        float wave1[6];
-        float wave2[6];
+        double body[6];
+        double wave1[6];
+        double wave2[6];
 		struct CnrCondition Left;
 		struct CnrCondition Right;
         Node *InitValues;
@@ -35,7 +35,7 @@ public:
 		int Reading(const char * fileName);
 		int getNumX();
 		string getRheology();
-		void setGauss(float a, float sigma, int signOfInv, float *wave);
+		void setGauss(double a, double sigma, int signOfInv, double *wave);
 		struct CnrCondition getCnrCondition(bool isLeft);
 };
 

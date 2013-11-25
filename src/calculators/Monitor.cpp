@@ -3,16 +3,16 @@
 Monitor::Monitor() {	
 }
 
-Monitor::Monitor(int _Num, float _tau) {
+Monitor::Monitor(int _Num, double _tau) {
 	tau = _tau;
 	MaxV = 0.0;
 	monStruct.Num = _Num;
-	monStruct.monArr = new float [monStruct.Num];
+	monStruct.monArr = new double [monStruct.Num];
 }
 
-Monitor::Monitor(int _Num, float _tau, string _rheology) {
+Monitor::Monitor(int _Num, double _tau, string _rheology) {
 	monStruct.Num = _Num;
-	monStruct.monArr = new float [monStruct.Num];
+	monStruct.monArr = new double [monStruct.Num];
 	MaxV = 0.0;
 	tau = _tau;
 	rheology = _rheology;
@@ -47,7 +47,7 @@ void Monitor::getCourant(Mesh *mesh) {
 	monStruct.max = monStruct.min;
 	
 	int i;
-	float temp;
+	double temp;
 	for(i = 1; i < mesh->NumX; i++) {
 		monStruct.monArr[i] = mesh->Values[i].getA() * tau / fmin(mesh->Values[i].x - mesh->Values[i-1].x, mesh->Values[i+1].x - mesh->Values[i].x);
 		monStruct.mean += monStruct.monArr[i];

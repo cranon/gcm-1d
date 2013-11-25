@@ -10,14 +10,14 @@ using namespace std;
 class Node {
 public:
     int num;
-    float x,v,eps,rho,E;
+    double x,v,eps,rho,E;
 	string rheology;
     Node();
-    Node(int _num, float _x, float _v, float _eps, float _rho, float _E);
-    float getRiman(int i);
-    float getRiman(int i, float a);
-	float getA();
-	float getE();
+    Node(int _num, double _x, double _v, double _eps, double _rho, double _E);
+    double getRiman(int i);
+    double getRiman(int i, double a);
+	double getA();
+	double getE();
 	~Node();
 };
 

@@ -16,7 +16,7 @@ class Scene {
 public:
 	Scene();
 	void Init(int NumOfBodies, const char * _ContCond, bool _inContact);
-	int doNextStep(float maxTau, int methodType);
+	int doNextStep(double maxTau, int methodType);
 	~Scene();
 };
 
