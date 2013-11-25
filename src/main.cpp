@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	int opt = 0;
-	float MaxTau = 0;
+	double MaxTau = 0;
 	int NumT = 0;
 	int methodType = 1;
 	while ((opt = getopt(argc, argv, "n:t:m:")) != -1) {

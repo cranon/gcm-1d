@@ -8,7 +8,7 @@
 using namespace std;
 
 class Body {
-	float t;
+	double t;
 	CnrCondition Left;
 	CnrCondition Right;
 	Mesh mesh;
@@ -17,7 +17,7 @@ class Body {
 	char fileName[100];
 public:
 	Body();
-	int doNextStep(float tau, int methodNumber, \
+	int doNextStep(double tau, int methodNumber, \
 					const char * _LeftCnrCond, const char * RightCnrCond);
 	void setParameters(const char *fileName);
 	void printData(int fileNumber);

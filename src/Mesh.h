@@ -8,8 +8,8 @@ using namespace std;
 
 struct MonStruct {
 	int Num;
-	float *monArr;
-	float mean, min, max;	
+	double *monArr;
+	double mean, min, max;	
 };
 
 class Mesh {

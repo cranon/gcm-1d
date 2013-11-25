@@ -9,36 +9,41 @@ Scene::~Scene() {
 	cout << "deleting scene" << endl;
 }
 
-int Scene::doNextStep(float maxTau, int methodType) {
+int Scene::doNextStep(double maxTau, int methodType) {
 	fileNumber = fileNumber + 1;
 	if (NumOfBodies == 1) {
 		Monitor monitor0(body1.mesh.NumX, maxTau);
 		monitor0.getCourant(&body1.mesh);
-		float temp = monitor0.monStruct.max;
-		
+		double temp = monitor0.monStruct.max;
 		if (methodType == 0) {
-			if ( fabs(temp - 1) > 1e-2 ) {
+			int i = 0;
+			if ( fabs(temp - 1) > 1e-0 ) {
+				temp = monitor0.monStruct.mean;
 				maxTau = maxTau / temp;
 				cout << "maxTau = " << maxTau << endl;
 			}
 			do {
+				if (i++ > 10) {
+					cout << "Warning! 10 iterations were done on " << fileNumber << " time step!\n";
+					break;
+				}
 				body1._mesh = &(body1.mesh);
 				if (body1.doNextStep(maxTau, methodType, "Previous", "Previous") == -1) return -1;
 				Monitor monitor(body1._mesh.NumX, maxTau);
 				monitor.getCourant(&body1._mesh);
-				temp = monitor.monStruct.max;
-				if ( fabs(temp - 1) > 1e-2 ) {
+				temp = monitor.monStruct.mean;
+				if ( fabs(temp - 1) > 1e-0 ) {
 					maxTau = maxTau / temp;
 					cout << "maxTau = " << maxTau << endl;
 				}
-			} while ( fabs(temp - 1) > 1e-2 );
+			} while ( fabs(temp - 1) > 1.1e-0 );
 			body1.mesh = &(body1._mesh);
 			body1.printData(fileNumber);
 			return 0;
 		}
 		
-		if(temp > 0.9) {
-			maxTau = maxTau * 0.9 / temp;
+		if(temp > 0.99) {
+			maxTau = maxTau * 0.99 / temp;
 			cout << "maxTau = " << maxTau << endl;
 		}
 		do {
@@ -47,11 +52,11 @@ int Scene::doNextStep(float maxTau, int methodType) {
 			Monitor monitor(body1._mesh.NumX, maxTau);
 			monitor.getCourant(&body1._mesh);
 			temp = monitor.monStruct.max;
-			if(temp > 0.9) {
-				maxTau = maxTau * 0.9 / temp;
+			if(temp > 0.99) {
+				maxTau = maxTau * 0.99 / temp;
 				cout << "maxTau = " << maxTau << endl;
 			}
-		} while(temp > 0.91);
+		} while(temp > 0.995);
 		body1.mesh = &(body1._mesh);
 		body1.printData(fileNumber);
 	}

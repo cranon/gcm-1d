@@ -4,12 +4,12 @@ using namespace std;
 
 class Monitor {
 	public:
-		float tau;
+		double tau;
 		string rheology;
-		float MaxV;
+		double MaxV;
 		Monitor();
-		Monitor(int _Num, float _tau);
-		Monitor(int _Num, float _tau, string _rheology);
+		Monitor(int _Num, double _tau);
+		Monitor(int _Num, double _tau, string _rheology);
 		struct MonStruct monStruct;
 		void getH(Mesh *mesh);
 		void getCourant(Mesh *mesh);

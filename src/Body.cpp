@@ -16,17 +16,17 @@ void Body::setParameters(const char * fileName) {
 	Right = parser.getCnrCondition(false);
 }
 
-int Body::doNextStep(float tau, int methodType, \
+int Body::doNextStep(double tau, int methodType, \
 						const char * _LeftCnrCond, const char * _RightCnrCond) {
 	NumMethod method(&_mesh, tau);
 	if (methodType == 0) {
-		float Lval = Left.val1;
+		double Lval = Left.val1;
 		bool LisEps = Left.isEps1;
 		if (t > Left.t1) {
 			Lval = 0.0;
 			LisEps = true;
 		}
-		float Rval = Right.val1;
+		double Rval = Right.val1;
 		bool RisEps = Right.isEps1;
 		if (t > Right.t1) {
 			Rval = 0.0;
@@ -37,7 +37,7 @@ int Body::doNextStep(float tau, int methodType, \
 	}
 	
 	Node first, last;
-	float val = Left.val1;
+	double val = Left.val1;
 	bool isEps = Left.isEps1;
 	if (t > Left.t1) {
 		val = 0.0;
