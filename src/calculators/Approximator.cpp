@@ -47,8 +47,8 @@ float Approximator::QuadraticAppr(int i, vec* b, float x0, bool limitor) {
 	vec X = solve(A, *b);
 		
 	// Limitor
-	if(!limitor) return X(0)*x0*x0 + X(1)*x0 + X(2);
-/*	else {
+	if(!limitor) return X(0)*x0*x0 + X(1)*x0 + X(2); /*
+	else {
 		float X0 = -X(1)/2/X(0);
 		float res = X(0)*x0*x0 + X(1)*x0 + X(2);
 		if(X0 >= x3 || X0 <= x1) return res;

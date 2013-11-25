@@ -33,7 +33,7 @@ void Mesh::printData(const char * fileName) {
 	for (int i = 0; i < NumX; i++) {
 		dataFile << Values[i].num << "	" << Values[i].x << "	" \
 				<< Values[i].v << "	" << Values[i].eps << "	" << \
-				Values[i].rho << "	" << Values[i].getE() << " " << Values[i].getA() << endl;
+				Values[i].rho << "	" << Values[i].getE() << " " << Values[i].getA() << " " << Values[i].getRiman(1) << endl;
 	}
 	dataFile.close();
 }

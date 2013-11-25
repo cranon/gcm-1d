@@ -133,26 +133,26 @@ int Parser::Reading(const char * fileName) {
         cfg.close();
 		
 		// Layer structure
-//		
-//		float rho0 = body[2];
-//		int NumOfLayers = 5;
-//		int NumOfPeriods = 1;
-//		int a = NumX/NumOfPeriods;
-//		int b = a/NumOfLayers;
-//		int m,i;
-//		for (int n = 0; n < NumOfPeriods; n++) {
-//			for (m = 0; m < NumOfLayers; m++) {
-//				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
-//					InitValues[i].rho =	rho0*(m+1);
-//				} 
-//			}
-//			while(i < NumX) {
-//				InitValues[i].rho =	rho0*(m);
-//				i++;
-//			}
-//		}
+		
+		float rho0 = body[2];
+		int NumOfLayers = 5;
+		int NumOfPeriods = 1;
+		int a = NumX/NumOfPeriods;
+		int b = a/NumOfLayers;
+		int m,i;
+		for (int n = 0; n < NumOfPeriods; n++) {
+			for (m = 0; m < NumOfLayers; m++) {
+				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
+					InitValues[i].rho =	rho0*(m+1);
+				} 
+			}
+			while(i < NumX) {
+				InitValues[i].rho =	rho0*(m);
+				i++;
+			}
+		}
 
-//		// Layer structure
+		// Layer structure
 
 }
     
@@ -166,7 +166,7 @@ void Parser::setGauss(float a, float sigma, int signOfInv, float *wave) {
 		if ((InitValues[i].x >= wave[0]) && (InitValues[i].x <= wave[1])) {
 			InitValues[i].v = wave[4] * \
 				exp(-(InitValues[i].x - a)*(InitValues[i].x - a)/2/(sigma*sigma));
-			InitValues[i].eps = InitValues[i].v * A * signOfInv;
+			InitValues[i].eps = InitValues[i].v * signOfInv / A;
 		}}
 }
 

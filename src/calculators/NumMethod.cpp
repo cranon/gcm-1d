@@ -230,11 +230,11 @@ int NumMethod::SecondOrder(Node first_node, Node last_node) {
 		aL = lAppA(i, 2);
 		aR = rAppA(i, 2);
 		b << mesh->Values[i-2].getRiman(1,aL) << mesh->Values[i-1].getRiman(1,aL) << mesh->Values[i].getRiman(1,aL);
-		w1 = proxima->QuadraticAppr(i-2, &b, mesh->Values[i].x - tau*aL, false);
+		w1 = proxima->QuadraticAppr(i-2, &b, mesh->Values[i].x - tau*aL, true);
 		
 		
 		b << mesh->Values[i].getRiman(2,aR) << mesh->Values[i+1].getRiman(2,aR) << mesh->Values[i+2].getRiman(2,aR);
-		w2 = proxima->QuadraticAppr(i, &b, mesh->Values[i].x + tau*aR, false);
+		w2 = proxima->QuadraticAppr(i, &b, mesh->Values[i].x + tau*aR, true);
 		
 		tmp.v = (-w1*aR + w2*aL)/(aL + aR);
 		tmp.eps = (w2 + w1)/(aL + aR);
