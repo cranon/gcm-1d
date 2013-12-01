@@ -152,7 +152,7 @@ int Parser::Reading(const char * fileName) {
 //			}
 //		}
 
-//		// Layer structure
+		// Layer structure
 
 }
     

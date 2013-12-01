@@ -2,13 +2,13 @@ Body1
 elastic
 
 Left_Corner{        
-        t	1e+6
-        fix	V	0
+        t 1e+6
+        fix	V 0
 }
  
 Right_Corner{
-        t        1e+6
-        fix V        0
+        t 1e+6
+        fix V 0
 }
 
 Number_of_nodes	51
@@ -21,8 +21,8 @@ EPS0  0
 
 wave1
 #gauss 1 0.05 0.005 
-x1        0.045
-x2       0.055
+x1 0.045
+x2 0.055
 rho0 7.5e+3
 E0 2e+11
 V_0        1.32e+0

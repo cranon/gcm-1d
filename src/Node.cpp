@@ -31,6 +31,7 @@ double Node::getA() {
 }
 
 double Node::getE() {
+	cout << rheology.c_str()[1] << endl;
 	switch((rheology.c_str())[0]) {
 		case 'e': // elastic model
 			return E;
@@ -64,5 +65,7 @@ double Node::getE() {
 
 	}
 }
+
+//double Node::
 
 
