@@ -1,7 +1,7 @@
 reset
 set term jpeg
 #set xrange [0:0.1] 
-#set yrange [-18.6676190233:18.6676190233] 
+#set yrange [-1.86676190233:1.86676190233] 
 set mytics 5
 set mxtics 5
 set grid xtics ytics mxtics mytics

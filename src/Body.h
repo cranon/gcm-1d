@@ -13,6 +13,7 @@ class Body {
 	CnrCondition Right;
 	Mesh mesh;
 	Mesh _mesh;
+	Mesh tmpMesh;
 	string rheology;
 	char fileName[100];
 public:

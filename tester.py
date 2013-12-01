@@ -7,6 +7,11 @@ import shutil
 import matplotlib.pyplot as pl
 import numpy as np
 from scipy import integrate
+from scipy.optimize import brentq
+
+xj = 0.0
+tau = 0.0
+
 
 def norm(f,x):
 	N = x.size
@@ -19,7 +24,7 @@ def norm(f,x):
 	a = np.sum(tmp)
 	return np.sqrt(a)	
 
-def initFunc(x):
+def initFunc2(x):
 	cfgFile = open('body1.txt','r')
 	cfg = cfgFile.readlines()
 	cfgFile.close()
@@ -30,18 +35,25 @@ def initFunc(x):
 	w = -2 * v0 * np.exp(-(x - a)*(x - a)/2/(sigma*sigma));
 	return w
 
-def initFunc2(x):
+def initFunc(x):
 	cfgFile = open('body1.txt','r')
 	cfg = cfgFile.readlines()
 	cfgFile.close()
 	v0 = float(cfg[27].split()[1])
 	A = math.sqrt(float(cfg[26].split()[1])/float(cfg[25].split()[1]))
-	w = np.zeros(x.size)
+	try:
+		w = np.zeros(x.size)
+	except:
+		w = 0.0
 	l = float(cfg[23].split()[1])
 	r = float(cfg[24].split()[1])
 	z = (l <= x)*(x <= r)
 	w = -2 * v0 * z
 	return w
+
+def g(x):
+	A = math.sqrt(float(cfg[26].split()[1])/float(cfg[25].split()[1]))
+	return x - xj + (A - initFunc(x)/2) * tau
 
 if (os.path.exists("ApprOrder")):
         shutil.rmtree("ApprOrder")
@@ -50,7 +62,7 @@ else:
         os.mkdir("ApprOrder")
 NumOfRuns = int (sys.argv[1])
 
-for m in [0,1,2]:
+for m in [1,2]:
 	for d in [0.989]: # [0.989, 0.75, 0.5, 0.11]:
 		if (not os.path.exists("ApprOrder/" + str(d))):
 			os.mkdir("ApprOrder/" + str(d))
@@ -72,11 +84,13 @@ for m in [0,1,2]:
 			plt.close()
 			h = (float(cfg[15].split()[1]) - float(cfg[14].split()[1]))/(N-1)
 			t = d*h/A
-			os.system('./run -n 1 -t ' + str(t) + ' -m ' + str(m) + ' > /dev/null')
+			tau = t
+			os.system('./run -n 1 -t ' + str(t) + ' -m ' + str(m))# + ' > /dev/null')
 			#if (i == NumOfRuns/2):
 			#	os.system('./launcher.py -n 200 -t ' + str(t) + ' -m ' + str(m) + ' -v')
 			x = np.empty(N)
 			w = np.empty(N)
+			wExt = np.empty(N)
 			bodyFile = open('data/Body_1_Step_1.txt','r')
 			data = bodyFile.readlines()
 			bodyFile.close()
@@ -85,15 +99,22 @@ for m in [0,1,2]:
 				x[j] = float(tmp.split()[1])
 				w[j] = float(tmp.split()[7])	
 				j = j + 1
-			wExt = initFunc(x - A*t)
-			wExt2 = initFunc2(x - A*t)
-			dif = wExt2 - w
-		#	'''
+			wExt[0] = wExt[N-1] = 0
+			for j in range (1, N-1, 1):
+				xj = x[j]
+				xInit = brentq(g, x[j-1], x[j+1])
+				wExt[j] = initFunc(xInit)
+			
+			wIter = wExt
+			for j in range (10):
+				wIter = initFunc(x - (A - wIter/2)*t)
+			wExt = wIter
+			#wExt = initFunc(x - A*t)
+			dif = wExt - w
 			pl.figure(i)
 			pl.plot(x,dif)
 			pl.savefig('ApprOrder/' + str(d) + '/' + str(m) + '/dif' + str(i) + '.png')
 			pl.close("all")
-		#	'''
 			maxDif[i] = max(np.abs(dif))
 			normDif[i] = norm(dif, x)
 
