@@ -15,6 +15,7 @@
 data/*
 Энтыр-прайз/*
 nbproject/*
+*.swp
 *.avi
 *.jpeg
 *.png

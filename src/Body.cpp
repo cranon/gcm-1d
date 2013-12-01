@@ -12,13 +12,14 @@ void Body::setParameters(const char * fileName) {
 	rheology = parser.getRheology();
 	mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
 	_mesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
+	tmpMesh.setParameters(parser.getInitValues(), parser.getNumX(), rheology);
 	Left = parser.getCnrCondition(true);
 	Right = parser.getCnrCondition(false);
 }
 
 int Body::doNextStep(double tau, int methodType, \
 						const char * _LeftCnrCond, const char * _RightCnrCond) {
-	NumMethod method(&_mesh, tau);
+	NumMethod method(&_mesh, &tmpMesh, tau);
 	if (methodType == 0) {
 		double Lval = Left.val1;
 		bool LisEps = Left.isEps1;
@@ -59,7 +60,7 @@ int Body::doNextStep(double tau, int methodType, \
 	}
 	switch (methodType) {
 		case 1: if(method.FirstOrder(first, last) == -1) return -1; break;
-		case 2: if(method.SecondOrder(first, last) == -1) return -1; break;
+		case 2: if(method.TimeSecondOrder(first, last) == -1) return -1; break;
 	}
 	t = t + tau;
 }

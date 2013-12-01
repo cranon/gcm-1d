@@ -6,9 +6,10 @@ NumMethod::NumMethod() {
 	
 }
 
-NumMethod::NumMethod(Mesh* _mesh, double _tau) {
+NumMethod::NumMethod(Mesh* _mesh, Mesh* _tmpMesh, double _tau) {
 	dx = true;
 	mesh = _mesh;
+	tmpMesh = _tmpMesh;
 	tau = _tau;
 	proxima = new Approximator(_mesh);
 }
@@ -274,6 +275,35 @@ int NumMethod::SecondOrder(Node first_node, Node last_node) {
 	mesh->Values[i-1] = temp2;
 	mesh->Values[i] = tmp;
 }
+
+int NumMethod::TimeSecondOrder(Node first_node, Node last_node) {
+	Mesh* tmp = mesh;
+	mesh = tmpMesh;
+	tmpMesh = tmp;
+	tau = tau/2;
+	SecondOrder(first_node, last_node);
+	tmp = mesh;
+	mesh = tmpMesh;
+	tmpMesh = tmp;
+	for(int i = 0; i < mesh->NumX; i++) {
+		mesh->Values[i].x = tmpMesh->Values[i].x;
+	}
+	
+	dx = false;
+	tau = 2*tau;
+	SecondOrder(first_node, last_node);
+	
+	tau = tau/2;
+	for(int i = 0; i < mesh->NumX; i++) {
+		mesh->Values[i].x = mesh->Values[i].x + (mesh->Values[i].v + \
+				tmpMesh->Values[i].v) * tau / 2;
+	}
+	
+	tau = 2*tau;
+	dx = true;
+	return 0;
+}
+
 
 int NumMethod::ImplicitSecondOrder(bool leftEpsIsFix, double leftFixVal, \
 		bool rightEpsIsFix, double rightFixVal) {
