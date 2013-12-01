@@ -31,41 +31,38 @@ double Node::getA() {
 }
 
 double Node::getE() {
-	cout << rheology.c_str()[1] << endl;
 	switch((rheology.c_str())[0]) {
 		case 'e': // elastic model
 			return E;
 			break;
 		case 'p': // plastic model
-			/*double ElcLim = 0.002;
-			double FldBgn = 0.003;
-			double FldEnd = 0.006;
-			double BrcPnt = 0.01;
-			double E0 = E;
-			double d = 0.1;
-			E0 = E0 / (1 + d);
-			double E1 = E0 / 3;
-			double _eps = fabs(eps);
-			if (_eps < ElcLim) return E0 * (1 + d);
-			if (_eps < FldBgn) return E0 * (d + erfc((_eps - (ElcLim + FldBgn) / 2)*6 / (FldBgn - ElcLim)) / 2);
-			if (_eps < FldEnd) return E0 * d;
-			if (_eps < BrcPnt) {
-				double a = (BrcPnt + FldEnd) / 2;
-				double b = (BrcPnt - FldEnd) / 2;
-				return E1 * exp(1 / (1 - b * b / (_eps - a) / (_eps - a))) + E0*d;
+			if((rheology.c_str())[7] == '1') {
+					double ElcLim = 0.0001;
+					double FldBgn = 0.00015;
+					double FldEnd = 0.0008;
+					double BrcPnt = 0.001;
+					double E0 = E;
+					double d = 0.05;
+					E0 = E0 / (1 + d);
+					double E1 = E0 / 3;
+					double _eps = fabs(eps);
+					if (_eps < ElcLim) return E0 * (1 + d);
+					if (_eps < FldBgn) return E0 * (d + erfc((_eps - (ElcLim + FldBgn) / 2)*6 / (FldBgn - ElcLim)) / 2);
+					if (_eps < FldEnd) return E0 * d;
+					if (_eps < BrcPnt) {
+						double a = (BrcPnt + FldEnd) / 2;
+						double b = (BrcPnt - FldEnd) / 2;
+						return E1 * exp(1 / (1 - b * b / (_eps - a) / (_eps - a))) + E0*d;
+					}
+					return E0*d;
+			} else {
+					double _eps = fabs(eps);
+					if(_eps >= 0.0001 && _eps < 0.000125) return E/3;
+					if(_eps >= 0.000125 && _eps < 0.000150) return E/10;
+					if(_eps >= 0.00015) return E/30;
+					else return E;
 			}
-			//	cout << "The Node is destroyed\n";
-			return E0*d;*/
-			double _eps = fabs(eps);
-			if(_eps >= 0.0001 && _eps < 0.000125) return E/3;
-			if(_eps >= 0.000125 && _eps < 0.000150) return E/10;
-			if(_eps >= 0.00015) return E/30;
-			else return E;
 			break;
-
 	}
 }
-
-//double Node::
-
 
