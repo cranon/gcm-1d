@@ -11,7 +11,7 @@ Right_Corner{
         fix V 0
 }
 
-Number_of_nodes	801
+Number_of_nodes	501
 LeftCorner 0
 RightCorner 0.1
 rho0 7.5e+3
@@ -21,11 +21,11 @@ EPS0 0
 
 wave1
 #gauss 1 0.05 0.005 
-x1 0.01
-x2 0.02
+x1 0.005
+x2 0.015
 rho0 7.5e+3
 E0 2e+11
-V_0 1
+V_0 10
 EPS_0 0
 
 wave2

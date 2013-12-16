@@ -99,6 +99,7 @@ def main():
 	j = 0
 	X = np.empty(N+1)
 	W = np.empty(N+1)
+	w1 = np.empty(N+1)
 	for tmp in data:
 		X[j] = float(tmp.split()[1])
 		W[j] = float(tmp.split()[7])	
@@ -140,8 +141,22 @@ def main():
 			w[j] = float(tmp.split()[7])	
 			j = j + 1
 		
-		f = interpolate.interp1d(x, w, kind='cubic')
-		w1 = f(X) 
+		'''
+		g = interpolate.pchip(x[0:3],w[0:3])
+		w1[0] = g(X[0])
+		
+		for cnt in range(1,X.size - 1,1):
+			loc = 2*cnt
+			# Fix checking the choice of loc!	
+			g = interpolate.pchip(x[loc-2:loc+2],w[loc-2:loc+2])
+			w1[cnt] = g(X[cnt])
+		
+		g = interpolate.pchip(x[-4:-1],w[-4:-1])
+		w1[-1] = g(X[-1])
+		'''
+		for cnt in range(w1.size):
+			w1[cnt] = w[2*cnt]
+
 		NormDiff += [norm(w1 - W, X)]
 		
 		#pl.figure(i)
@@ -160,9 +175,11 @@ def main():
 		W = w
 		X = np.empty(np.size(x))
 		X = x
+		w1 = np.empty(N+1)
+
 	logDiff = []
 	for i in range(1, Num-1):
-		logDiff += [math.log(NormDiff[i-1]/NormDiff[i])/math.log(2)]
+		logDiff += [np.log2(NormDiff[i-1]/NormDiff[i])]
 	
 	pl.figure()
 	pl.grid(True)
@@ -174,4 +191,5 @@ def main():
 	pl.grid(True)
 	pl.plot(range(0, Num-2), logDiff, '*-')
 	pl.savefig('ApprOrder/logGraph.png')
+	pl.show()
 main()

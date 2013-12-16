@@ -24,7 +24,7 @@ def norm(f,x):
 	a = np.sum(tmp)
 	return np.sqrt(a)	
 
-def initFunc2(x):
+def initFunc(x):
 	cfgFile = open('body1.txt','r')
 	cfg = cfgFile.readlines()
 	cfgFile.close()
@@ -35,7 +35,7 @@ def initFunc2(x):
 	w = -2 * v0 * np.exp(-(x - a)*(x - a)/2/(sigma*sigma));
 	return w
 
-def initFunc(x):
+def initFunc2(x):
 	cfgFile = open('body1.txt','r')
 	cfg = cfgFile.readlines()
 	cfgFile.close()
@@ -109,7 +109,7 @@ for m in [1,2]:
 			for j in range (10):
 				wIter = initFunc(x - (A - wIter/2)*t)
 			wExt = wIter
-			#wExt = initFunc(x - A*t)
+		#	wExt = initFunc(x - A*t)
 			dif = wExt - w
 			pl.figure(i)
 			pl.plot(x,dif)

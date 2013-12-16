@@ -23,6 +23,7 @@ public:
 	void setParameters(const char *fileName);
 	void printData(int fileNumber);
 	void printData(int fileNumber, struct MonStruct *monStruct);
+	void printRheology();
 	~Body();
 	friend class Scene;
 

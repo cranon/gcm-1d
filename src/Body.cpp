@@ -79,3 +79,15 @@ Body::~Body() {
 	cout << "deleting body" << endl;
 }
 
+void Body::printRheology() {
+	ofstream dataFile ("Rheology", ios::out);
+	dataFile.precision(15);
+	Node smpl;
+	double maxEps = 15e-4;
+	int N = 200;
+	for (int i = 0; i < N; i++) {
+		smpl.eps = maxEps/N*i;
+		dataFile << scientific << smpl.eps << "\t" << smpl.getE() << endl;
+	}
+	dataFile.close();
+}

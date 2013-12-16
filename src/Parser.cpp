@@ -133,24 +133,24 @@ int Parser::Reading(const char * fileName) {
         cfg.close();
 		
 		// Layer structure
-//		
-//		double rho0 = body[2];
-//		int NumOfLayers = 5;
-//		int NumOfPeriods = 1;
-//		int a = NumX/NumOfPeriods;
-//		int b = a/NumOfLayers;
-//		int m,i;
-//		for (int n = 0; n < NumOfPeriods; n++) {
-//			for (m = 0; m < NumOfLayers; m++) {
-//				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
-//					InitValues[i].rho =	rho0*(m+1);
-//				} 
-//			}
-//			while(i < NumX) {
-//				InitValues[i].rho =	rho0*(m);
-//				i++;
-//			}
-//		}
+		
+		double rho0 = body[2];
+		int NumOfLayers = 5;
+		int NumOfPeriods = 1;
+		int a = NumX/NumOfPeriods;
+		int b = a/NumOfLayers;
+		int m,i;
+		for (int n = 0; n < NumOfPeriods; n++) {
+			for (m = 0; m < NumOfLayers; m++) {
+				for (i = a*n + b*m; i < a*n + b*(m+1); i++) {
+					InitValues[i].rho =	rho0*(m+1);
+				} 
+			}
+			while(i < NumX) {
+				InitValues[i].rho =	rho0*(m);
+				i++;
+			}
+		}
 
 		// Layer structure
 

@@ -17,7 +17,7 @@ int Scene::doNextStep(double maxTau, int methodType) {
 		double temp = monitor0.monStruct.max;
 		if (methodType == 0) {
 			int i = 0;
-			if ( fabs(temp - 1) > 1e-0 ) {
+			if ( fabs(temp - 1) > 1e+1 ) {
 				temp = monitor0.monStruct.mean;
 				maxTau = maxTau / temp;
 				cout << "maxTau = " << maxTau << endl;
@@ -32,11 +32,11 @@ int Scene::doNextStep(double maxTau, int methodType) {
 				Monitor monitor(body1._mesh.NumX, maxTau);
 				monitor.getCourant(&body1._mesh);
 				temp = monitor.monStruct.mean;
-				if ( fabs(temp - 1) > 1e-0 ) {
+				if ( fabs(temp - 1) > 1e+1 ) {
 					maxTau = maxTau / temp;
 					cout << "maxTau = " << maxTau << endl;
 				}
-			} while ( fabs(temp - 1) > 1.1e-0 );
+			} while ( fabs(temp - 1) > 1.1e+1 );
 			body1.mesh = &(body1._mesh);
 			body1.printData(fileNumber);
 			return 0;

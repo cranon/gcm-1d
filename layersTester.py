@@ -11,7 +11,14 @@ import matplotlib.pyplot as pl
 #import numpy as np
 #from scipy import integrate
 
-# Script for checking amplitudes in layer structure
+#	Script for checking amplitudes in layer structure
+#	
+#	! ! ! ! ! W A R N I N G ! ! ! ! !
+#
+#	In Parser.cpp Layer structure is on!	
+#	body1.txt is like LS_Body1.txt
+#	run like launcher.py, but tau must be normal
+#
 
 def foo1(NumT, maxTau, m):
 	os.system('./run -n ' + str(NumT) + ' -t ' + str(maxTau) + ' -m ' + str(m))
@@ -95,7 +102,7 @@ for i in range(1, NumOfLayers):
 		time.sleep(0.1)
 	H = int(H*math.sqrt(getRho(i)/getRho(i+1)))
 	u += [float(cfg[int(x_side[i-1]*(Number_of_nodes-1)/(RightCnr - LeftCnr) + H/2)].split()[2])]
-	D += [abs(a[i] - u[i])]
+	D += [math.log(abs(a[i] - u[i])/a[i])/math.log(10)]
 	print fileNumber[i], int(x_side[i-1]*(Number_of_nodes-1)/(RightCnr - LeftCnr) + H/2)
 
 D.pop(0)

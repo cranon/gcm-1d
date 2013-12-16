@@ -74,8 +74,6 @@ plt = open('plotter','w')
 plt.writelines(plt_lines)
 plt.close()
 rheology = cfg[1].split()[0]
-if (rheology == 'plastic'):
-	MaxV = MaxV*2
 LeftCnr = cfg[14].split()[1]
 RightCnr = cfg[15].split()[1]
 
@@ -103,7 +101,7 @@ if MaxV != 0:
 	plt.writelines(plt_lines)
 	plt.close()
 
-step = 5
+step = 1
 for i in range(0,(NumT + 1),step):
 	plt = open('plotter','r')
 	plt_lines = plt.readlines()
@@ -128,7 +126,7 @@ for i in range(0,(NumT + 1),step):
 	plt.close()
 	if (i == NumT):
 		os.system('gnuplot plotter')
-		os.system('avconv -y -f image2 -i data/plots/Plot_%d0.jpeg -r 12 -threads auto video.avi')
+		os.system('avconv -y -f image2 -i data/plots/Plot_%d.jpeg -r 12 -threads auto video.avi')
 		os.system('totem video.avi')
 		exit(0)
 	while True:
