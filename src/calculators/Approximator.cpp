@@ -21,6 +21,10 @@ double Approximator::LinearAppr(int i, vec* b, double x0) {
 	
 }
 
+double Approximator::LinearAppr(double x1, double y1, double x2, double y2, double x0) {
+	return (y1*(x2 - x0) + y2*(x0 - x1))/(x2 - x1);
+}
+
 vec Approximator::LinearAppr(int i, vec* b) {
 	mat A;
 	A << mesh->Values[i].x << 1 << endr
@@ -45,7 +49,7 @@ double Approximator::QuadraticAppr(int i, vec* b, double x0, bool limitor) {
 		<< x3*x3 << x3 << 1.0 << endr;
 		
 	vec X = solve(A, *b);
-		
+	//if(abs(X(0)) < 0.001*abs(((*b)(2) - (*b)(0))/(x3 + 1))) return LinearAppr(x1, (*b)(0), x3, (*b)(2), x0);
 	// Limitor
 	if(!limitor) 
 		return X(0)*x0*x0 + X(1)*x0 + X(2);
@@ -54,12 +58,24 @@ double Approximator::QuadraticAppr(int i, vec* b, double x0, bool limitor) {
 		double res = X(0)*x0*x0 + X(1)*x0 + X(2);
 		if(X0 >= x3 || X0 <= x1) return res;
 		else if(x0 <= 0 && X0 < 0) {
-			if (res < fmin((*b)(0), (*b)(1))) return fmin((*b)(0), (*b)(1));
-			if (res > fmax((*b)(0), (*b)(1))) return fmax((*b)(0), (*b)(1));
+			if(res < fmin((*b)(0), (*b)(1))) {
+				//cout << X(0) << endl << ((*b)(2) - (*b)(0))/(x3 + 1)  << endl << endl;
+				//cout << i << " step 1" << endl;
+				return fmin((*b)(0), (*b)(1));
+			} else if(res > fmax((*b)(0), (*b)(1))) {
+				//cout << X(0) << endl << ((*b)(2) - (*b)(0))/(x3 + 1) << endl << endl;
+				//cout << i << " step 2" << endl;
+				return fmax((*b)(0), (*b)(1));
+			}
 			return res;
 		} else if(x0 >= 0 && X0 > 0) {
-			if (res < fmin((*b)(2), (*b)(1))) return fmin((*b)(2), (*b)(1));
-			if (res > fmax((*b)(2), (*b)(1))) return fmax((*b)(2), (*b)(1));
+			if(res < fmin((*b)(2), (*b)(1))) {
+				//cout << i << " step 3" << endl;
+				return fmin((*b)(2), (*b)(1));
+			} else if(res > fmax((*b)(2), (*b)(1))) {
+				//cout << i << " step 4" << endl;
+				return fmax((*b)(2), (*b)(1));
+			}
 			return res;
 		} else {
 			return res;

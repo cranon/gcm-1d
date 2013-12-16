@@ -86,7 +86,7 @@ if MaxV != 0:
 	for i in range(len(plt_lines)):
 		line_arr = plt_lines[i].split()
 		if line_arr.count("yrange") == 1:
-			line_arr[2] = str( '[-' + str(MaxV) + ':' + str(MaxV) + ']' )
+			line_arr[2] = str( '[-' + str(MaxV*0.2) + ':' + str(MaxV*0.8) + ']' )
 			plt_lines[i] = ''
 			for word in line_arr:
 				plt_lines[i] = plt_lines[i] + word + ' '
@@ -103,7 +103,7 @@ if MaxV != 0:
 	plt.writelines(plt_lines)
 	plt.close()
 
-step = 5
+step = 1
 for i in range(0,(NumT + 1),step):
 	plt = open('plotter','r')
 	plt_lines = plt.readlines()
@@ -128,7 +128,7 @@ for i in range(0,(NumT + 1),step):
 	plt.close()
 	if (i == NumT):
 		os.system('gnuplot plotter')
-		os.system('avconv -y -f image2 -i data/plots/Plot_%d0.jpeg -r 12 -threads auto video.avi')
+		os.system('avconv -y -f image2 -i data/plots/Plot_%d.jpeg -r 12 -threads auto video.avi')
 		os.system('totem video.avi')
 		exit(0)
 	while True:
