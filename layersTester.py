@@ -13,6 +13,35 @@ import matplotlib.pyplot as pl
 
 # Script for checking amplitudes in layer structure
 
+def writeDefault():
+	cfgFile = open('body1.txt','r')
+	cfg = cfgFile.readlines()
+	cfgFile.close()
+	
+	cfg[1] = 'elastic' + '\n'
+	cfg[4] = cfg[4].split()[0] + '\t' + str(1e+6) + '\n'
+	cfg[5] = cfg[5].split()[0] + '\t' + 'V' + '\t' + str(0) + '\n'
+	cfg[9] = cfg[9].split()[0] + '\t' + str(1e+6) + '\n'
+	cfg[10] = cfg[10].split()[0] + '\t' + 'V' + '\t' + str(0) + '\n'
+	cfg[13] = cfg[13].split()[0] + '\t' + str(501) + '\n'
+	cfg[14] = cfg[14].split()[0] + '\t' + str(0) + '\n'
+	cfg[15] = cfg[15].split()[0] + '\t' + str(0.1) + '\n'
+	cfg[16] = cfg[16].split()[0] + '\t' + str(7.5e+3) + '\n'
+	cfg[17] = cfg[17].split()[0] + '\t' + str(2e+11) + '\n'
+	if (cfg[22].split()[0] == "gauss"):
+		cfg[22] = '#' + cfg[22]
+	cfg[23] = cfg[23].split()[0] + '\t' + str(0.005) + '\n'
+	cfg[24] = cfg[24].split()[0] + '\t' + str(0.015) + '\n'
+	cfg[25] = cfg[25].split()[0] + '\t' + str(7.5e+3) + '\n'
+	cfg[26] = cfg[26].split()[0] + '\t' + str(2e+11) + '\n'
+	cfg[27] = cfg[27].split()[0] + '\t' + str(10) + '\n'
+	cfg[28] = cfg[28].split()[0] + '\t' + str(0) + '\n'
+		
+	out = open('body1.txt','w')
+	out.writelines(cfg)
+	out.close()
+	
+	
 def foo1(NumT, maxTau, m):
 	os.system('./run -n ' + str(NumT) + ' -t ' + str(maxTau) + ' -m ' + str(m))
 
@@ -31,10 +60,8 @@ else:
 if (sys.argv[5] == '-m'):
 	methodType = int(sys.argv[6])
 
-isVelocity = False
-if (sys.argv[7] == '-v'):
-	isVelocity = True
-	print 'Plots with velocity'
+if (sys.argv[7] == '-default'):
+	writeDefault()	
 
 if (os.path.exists("data")): 
 	shutil.rmtree("data")
@@ -95,15 +122,17 @@ for i in range(1, NumOfLayers):
 		time.sleep(0.1)
 	H = int(H*math.sqrt(getRho(i)/getRho(i+1)))
 	u += [float(cfg[int(x_side[i-1]*(Number_of_nodes-1)/(RightCnr - LeftCnr) + H/2)].split()[2])]
-	D += [abs(a[i] - u[i])]
+	D += [math.log10(abs(a[i] - u[i])/a[i])]
 	print fileNumber[i], int(x_side[i-1]*(Number_of_nodes-1)/(RightCnr - LeftCnr) + H/2)
 
 D.pop(0)
 print a, u
 pl.figure(1)
+pl.xlabel('Layer_num')
+pl.xlabel('log10(abs(an - num)/an)')
 pl.title('Difference between analytic and simulated amplitudes')
 pl.grid(True)
-pl.plot(range(1, 5), D, '*-')
+pl.plot(range(1, 5), D, 'o-')
 pl.savefig('comparasion.png')
 pl.show()
 
