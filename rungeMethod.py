@@ -10,7 +10,10 @@ import numpy as np
 import matplotlib.pyplot as pl
 from scipy import interpolate
 
-def norm(f,x):
+def norm1(f):
+	return np.max(np.fabs(f))
+	
+def norm2(f,x):
 	N = x.size
 	h = np.empty(N)
 	h[0] = (x[1] - x[0])/2
@@ -49,9 +52,14 @@ def main():
 		print 'Invalid Parameters!\n'
 		sys.exit(-1)
 	
+	Norm2isUsed = True
+	
+	if (sys.argv[5] == '-n1'):
+		Norm2isUsed = False
+	
 	TauIsFixed = True
 	
-	if (sys.argv[5] == '-c'):
+	if (sys.argv[6] == '-c'):
 		TauIsFixed = False
 	
 	if (os.path.exists("data")): 
@@ -176,7 +184,6 @@ def main():
 		X = np.empty(np.size(x))
 		X = x
 		w1 = np.empty(N+1)
-
 	logDiff = []
 	for i in range(1, Num-1):
 		logDiff += [np.log2(NormDiff[i-1]/NormDiff[i])]
